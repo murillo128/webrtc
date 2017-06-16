@@ -357,8 +357,7 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
   frame_marks.independent = (frame_type == kVideoFrameKey);
 
   // Codec specific
-  switch (video_type)
-  {
+  switch (video_type) {
     case kRtpVideoH264:
       // Nothing to add
       frame_marks.discardable = false;
@@ -390,7 +389,7 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
       // Do not use frame marking
       frame_marking_enabled = false;
   }
-  // Only add frame marking for known codecs
+   // Only add frame marking for known codecs
    if (frame_marking_enabled)
        // Add extension header for frame marking
        rtp_header->SetExtension<FrameMarking>(frame_marks);
@@ -432,8 +431,8 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
     if (!packetizer->NextPacket(packet.get()))
       return false;
     RTC_DCHECK_LE(packet->payload_size(),
-                  last ? max_data_payload_length - last_packet_reduction_len
-                       : max_data_payload_length);
+      last ? max_data_payload_length - last_packet_reduction_len
+        : max_data_payload_length);
 
     // Update start and end marks
     frame_marks.startOfFrame = first;
