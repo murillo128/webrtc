@@ -76,6 +76,13 @@ const char* RtpExtension::kVideoContentTypeUri =
     "http://www.webrtc.org/experiments/rtp-hdrext/video-content-type";
 const int RtpExtension::kVideoContentTypeDefaultId = 7;
 
+// This extensions provides meta-information about the RTP streams outside the
+// encrypted media payload, an RTP switch can do codec-agnostic
+// selective forwarding without decrypting the payload
+const char* RtpExtension::kFrameMarkingUri =
+    "urn:ietf:params:rtp-hdrext:framemarking";
+const int RtpExtension::kFrameMarkingDefaultId = 8;
+
 const int RtpExtension::kMinId = 1;
 const int RtpExtension::kMaxId = 14;
 
@@ -90,7 +97,8 @@ bool RtpExtension::IsSupportedForVideo(const std::string& uri) {
          uri == webrtc::RtpExtension::kVideoRotationUri ||
          uri == webrtc::RtpExtension::kTransportSequenceNumberUri ||
          uri == webrtc::RtpExtension::kPlayoutDelayUri ||
-         uri == webrtc::RtpExtension::kVideoContentTypeUri;
+         uri == webrtc::RtpExtension::kVideoContentTypeUri ||
+         uri == webrtc::RtpExtension::kFrameMarkingUri;
 }
 
 VideoStream::VideoStream()

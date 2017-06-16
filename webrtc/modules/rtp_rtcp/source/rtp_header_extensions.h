@@ -156,5 +156,17 @@ class RepairedRtpStreamId {
   static bool Write(uint8_t* data, const std::string& rsid);
 };
 
+class FrameMarking {
+ public:
+  static constexpr RTPExtensionType kId = kRtpExtensionFrameMarking;
+  static constexpr const char* kUri = 
+      "urn:ietf:params:rtp-hdrext:framemarking";
+  static bool Parse(const uint8_t* data, 
+                    uint8_t length,
+                    FrameMarks* frame_marks);
+  static size_t ValueSize(const FrameMarks& frame_marks);
+  static bool Write(uint8_t* data, const FrameMarks& frame_marks);
+};
+
 }  // namespace webrtc
 #endif  // WEBRTC_MODULES_RTP_RTCP_SOURCE_RTP_HEADER_EXTENSIONS_H_

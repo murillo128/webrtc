@@ -48,7 +48,8 @@ RTPHeaderExtension::RTPHeaderExtension()
       hasVideoRotation(false),
       videoRotation(kVideoRotation_0),
       hasVideoContentType(false),
-      videoContentType(VideoContentType::UNSPECIFIED) {}
+      videoContentType(VideoContentType::UNSPECIFIED),
+      hasFrameMarks(false) {}
 
 RTPHeader::RTPHeader()
     : markerBit(false),
