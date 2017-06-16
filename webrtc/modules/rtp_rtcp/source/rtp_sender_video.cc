@@ -378,10 +378,12 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
       frame_marks.spatialLayerId = 0;
       frame_marks.tl0PicIdx = video_header->codecHeader.VP9.tl0_pic_idx;
       // TODO: This will need to be changed to support VP9 SVC, but videoheader
-      // is set per-frame, not per packet, so we can't have access to this values
+      // is set per-frame, not per packet, so we can't have access to this 
+      // values.
       // Also, small modifications to the extensions will be needed to not
       // change size of the extension between sid:0 and sid:1
-//    frame_marks.startOfFrame = video_header->codecHeader.VP9.beginning_of_frame;
+//    frame_marks.startOfFrame 
+//      = video_header->codecHeader.VP9.beginning_of_frame;
 //    frame_marks.endOfFrame = video_header->codecHeader.VP9.end_of_frame;
 //    frame_marks.spatialLayerId = video_header->codecHeader.VP9.spatial_idx;
       break;

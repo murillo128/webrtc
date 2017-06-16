@@ -809,7 +809,7 @@ struct RTPHeaderExtension {
   // TODO(danilchap): Update url from draft to release version.
   StreamId stream_id;
   StreamId repaired_stream_id;
-  
+
   // For Frame Marking RTP Header Extension:
   // https://tools.ietf.org/html/draft-ietf-avtext-framemarking-04#page-4
   bool hasFrameMarks;

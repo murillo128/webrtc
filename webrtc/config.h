@@ -104,7 +104,7 @@ struct RtpExtension {
   // https://tools.ietf.org/html/draft-ietf-avtext-framemarking-04#page-4
   static const char* kFrameMarkingUri;
   static const int kFrameMarkingDefaultId;
-  
+
   // Inclusive min and max IDs for one-byte header extensions, per RFC5285.
   static const int kMinId;
   static const int kMaxId;
