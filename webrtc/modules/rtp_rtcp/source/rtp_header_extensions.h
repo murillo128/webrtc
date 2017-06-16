@@ -159,9 +159,9 @@ class RepairedRtpStreamId {
 class FrameMarking {
  public:
   static constexpr RTPExtensionType kId = kRtpExtensionFrameMarking;
-  static constexpr const char* kUri = 
+  static constexpr const char* kUri =
       "urn:ietf:params:rtp-hdrext:framemarking";
-  static bool Parse(const uint8_t* data, 
+  static bool Parse(const uint8_t* data,
                     uint8_t length,
                     FrameMarks* frame_marks);
   static size_t ValueSize(const FrameMarks& frame_marks);

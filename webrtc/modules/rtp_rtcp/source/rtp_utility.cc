@@ -257,10 +257,10 @@ bool RtpHeaderParser::Parse(RTPHeader* header,
   // May not be present in packet.
   header->extension.hasVideoContentType = false;
   header->extension.videoContentType = VideoContentType::UNSPECIFIED;
-  
+
   // May not be present in packet.
   header->extension.hasFrameMarks = false;
-  
+
   if (X) {
     /* RTP header extension, RFC 3550.
      0                   1                   2                   3
@@ -487,14 +487,14 @@ void RtpHeaderParser::ParseOneByteExtensionHeader(
             return;
           }
           // For Frame Marking RTP Header Extension:
-          // 
+          //
           // https://tools.ietf.org/html/draft-ietf-avtext-framemarking-04#page-4
           // This extensions provides meta-information about the RTP streams outside the
           // encrypted media payload, an RTP switch can do codec-agnostic
           // selective forwarding without decrypting the payload
           //
           // for Non-Scalable Streams
-          // 
+          //
           //     0                   1
           //     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
           //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -502,13 +502,13 @@ void RtpHeaderParser::ParseOneByteExtensionHeader(
           //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
           //
           // for Scalable Streams
-          // 
+          //
           //     0                   1                   2                   3
           //     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
           //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
           //    |  ID=? |  L=2  |S|E|I|D|B| TID |   LID         |    TL0PICIDX  |
           //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-          //        
+          //
           // Set frame marking data
           header->extension.frameMarks.startOfFrame = (ptr[0] & 0x80) != 0;
           header->extension.frameMarks.endOfFrame = (ptr[0] & 0x40) != 0;
@@ -527,7 +527,7 @@ void RtpHeaderParser::ParseOneByteExtensionHeader(
             header->extension.frameMarks.baseLayerSync = (ptr[0] & 0x08) != 0;
             header->extension.frameMarks.temporalLayerId = (ptr[0] & 0x07) != 0;
             header->extension.frameMarks.spatialLayerId = ptr[1];
-            header->extension.frameMarks.tl0PicIdx = ptr[2]; 
+            header->extension.frameMarks.tl0PicIdx = ptr[2];
           }
           break;
         }

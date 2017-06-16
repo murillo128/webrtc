@@ -346,11 +346,11 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
     red_enabled = this->red_enabled();
     retransmission_settings = retransmission_settings_;
   }
-  
+
   // Set Frame Marks
   FrameMarks frame_marks;
   bool frame_marking_enabled = true;
-  
+
   // Common info
   frame_marks.startOfFrame = true;
   frame_marks.endOfFrame = false;
@@ -383,7 +383,7 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
       // Also, small modifications to the extensions will be needed to not
       // change size of the extension between sid:0 and sid:1
 //    frame_marks.startOfFrame = video_header->codecHeader.VP9.beginning_of_frame;
-//    frame_marks.endOfFrame = video_header->codecHeader.VP9.end_of_frame;     
+//    frame_marks.endOfFrame = video_header->codecHeader.VP9.end_of_frame;
 //    frame_marks.spatialLayerId = video_header->codecHeader.VP9.spatial_idx;
       break;
     default:
@@ -394,7 +394,7 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
    if (frame_marking_enabled)
        // Add extension header for frame marking
        rtp_header->SetExtension<FrameMarking>(frame_marks);
-  
+
   size_t packet_capacity = rtp_sender_->MaxRtpPacketSize() -
                            fec_packet_overhead -
                            (rtp_sender_->RtxStatus() ? kRtxHeaderSize : 0);
@@ -425,7 +425,7 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
 
   bool first_frame = first_frame_sent_();
   for (size_t i = 0; i < num_packets; ++i) {
-    bool first = (i == 0);	  
+    bool first = (i == 0);
     bool last = (i + 1) == num_packets;
     auto packet = last ? std::move(last_packet)
                        : rtc::MakeUnique<RtpPacketToSend>(*rtp_header);
@@ -434,16 +434,16 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
     RTC_DCHECK_LE(packet->payload_size(),
                   last ? max_data_payload_length - last_packet_reduction_len
                        : max_data_payload_length);
-    
+
     // Update start and end marks
     frame_marks.startOfFrame = first;
     frame_marks.endOfFrame = last;
-    
+
     // Only add frame marking for known codecs
    if (frame_marking_enabled)
        // Update extension header for frame marking
        packet->SetExtension<FrameMarking>(frame_marks);
-  
+
     if (!rtp_sender_->AssignSequenceNumber(packet.get()))
       return false;
 

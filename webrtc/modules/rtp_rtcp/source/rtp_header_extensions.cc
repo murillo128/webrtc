@@ -314,14 +314,14 @@ bool RepairedRtpStreamId::Write(uint8_t* data, const std::string& rsid) {
 
 
 // For Frame Marking RTP Header Extension:
-// 
+//
 // https://tools.ietf.org/html/draft-ietf-avtext-framemarking-04#page-4
 // This extensions provides meta-information about the RTP streams outside the
 // encrypted media payload, an RTP switch can do codec-agnostic
 // selective forwarding without decrypting the payload
 //
 // for Non-Scalable Streams
-// 
+//
 //     0                   1
 //     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
 //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -329,7 +329,7 @@ bool RepairedRtpStreamId::Write(uint8_t* data, const std::string& rsid) {
 //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //
 // for Scalable Streams
-// 
+//
 //     0                   1                   2                   3
 //     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -348,8 +348,8 @@ bool FrameMarking::Parse(const uint8_t* data,
   frame_marks->startOfFrame = (data[0] & 0x80) != 0;
   frame_marks->endOfFrame = (data[0] & 0x40) != 0;
   frame_marks->independent = (data[0] & 0x20) != 0;
-  frame_marks->discardable =  (data[0] & 0x10) != 0;
-  
+  frame_marks->discardable = (data[0] & 0x10) != 0;
+
   // Check variable length
   if (length==1) {
     // We are non-scalable
@@ -362,11 +362,11 @@ bool FrameMarking::Parse(const uint8_t* data,
     frame_marks->baseLayerSync = (data[0] & 0x08) != 0;
     frame_marks->temporalLayerId = (data[0] & 0x07) != 0;
     frame_marks->spatialLayerId = data[1];
-    frame_marks->tl0PicIdx = data[2]; 
+    frame_marks->tl0PicIdx = data[2];
   } else {
     // Incorrect length
     return false;
-  } 
+  }
   return true;
 }
 
@@ -376,7 +376,7 @@ size_t FrameMarking::ValueSize(const FrameMarks& frame_marks)
   if (frame_marks.baseLayerSync
       || (frame_marks.temporalLayerId
             && frame_marks.temporalLayerId != kNoTemporalIdx)
-      || (frame_marks.spatialLayerId 
+      || (frame_marks.spatialLayerId
             && frame_marks.spatialLayerId != kNoSpatialIdx)
       || (frame_marks.tl0PicIdx
             && frame_marks.tl0PicIdx != (uint8_t)kNoTl0PicIdx)
@@ -391,14 +391,14 @@ bool FrameMarking::Write(uint8_t* data, const FrameMarks& frame_marks) {
   data[0] |= frame_marks.endOfFrame ? 0x40 : 0x00;
   data[0] |= frame_marks.independent ? 0x20 : 0x00;
   data[0] |= frame_marks.discardable ? 0x10 : 0x00;
-  
+
   // Check if it is scalable
   if (frame_marks.baseLayerSync
-       || (frame_marks.temporalLayerId 
+       || (frame_marks.temporalLayerId
             && frame_marks.temporalLayerId != kNoTemporalIdx)
        || (frame_marks.spatialLayerId
             && frame_marks.spatialLayerId != kNoSpatialIdx)
-       || (frame_marks.tl0PicIdx 
+       || (frame_marks.tl0PicIdx
             && frame_marks.tl0PicIdx != (uint8_t)kNoTl0PicIdx)
    ){
     data[0] |= frame_marks.baseLayerSync ? 0x08 : 0x00;
