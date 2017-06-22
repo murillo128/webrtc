@@ -301,7 +301,6 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
   rtp_header->SetPayloadType(payload_type);
   rtp_header->SetTimestamp(rtp_timestamp);
   rtp_header->set_capture_time_ms(capture_time_ms);
-<<<<<<< HEAD
   auto last_packet = rtc::MakeUnique<RtpPacketToSend>(*rtp_header);
 
   size_t fec_packet_overhead;
@@ -400,7 +399,7 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
   if (frame_marking_enabled)
       // Add extension header for frame marking
       rtp_header->SetExtension<FrameMarking>(frame_marks);
-  
+
   auto last_packet = rtc::MakeUnique<RtpPacketToSend>(*rtp_header);
 
   size_t fec_packet_overhead;
