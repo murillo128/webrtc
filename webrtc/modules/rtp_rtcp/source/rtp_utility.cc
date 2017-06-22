@@ -246,8 +246,13 @@ bool RtpHeaderParser::Parse(RTPHeader* header,
   header->extension.hasVideoContentType = false;
   header->extension.videoContentType = VideoContentType::UNSPECIFIED;
 
+<<<<<<< HEAD
   header->extension.has_video_timing = false;
   header->extension.video_timing = {0u, 0u, 0u, 0u, 0u, 0u, false};
+=======
+  // May not be present in packet.
+  header->extension.hasFrameMarks = false;
+>>>>>>> Implement FrameMarking header extension support
 
   if (X) {
     /* RTP header extension, RFC 3550.
@@ -481,6 +486,56 @@ void RtpHeaderParser::ParseOneByteExtensionHeader(
         }
         case kRtpExtensionMid: {
           header->extension.mid.Set(rtc::MakeArrayView(ptr, len + 1));
+          break;
+        }
+        case kRtpExtensionFrameMarking: {
+          if (len != 0 && len != 2) {
+            LOG(LS_WARNING) << "Incorrect frame marking len: " << len;
+            return;
+          }
+          // For Frame Marking RTP Header Extension:
+          //
+          // https://tools.ietf.org/html/draft-ietf-avtext-framemarking-04#page-4
+          // This extensions provides meta-information about the RTP streams outside the
+          // encrypted media payload, an RTP switch can do codec-agnostic
+          // selective forwarding without decrypting the payload
+          //
+          // for Non-Scalable Streams
+          //
+          //     0                   1
+          //     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
+          //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+          //    |  ID=? |  L=0  |S|E|I|D|0 0 0 0|
+          //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+          //
+          // for Scalable Streams
+          //
+          //     0                   1                   2                   3
+          //     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+          //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+          //    |  ID=? |  L=2  |S|E|I|D|B| TID |   LID         |    TL0PICIDX  |
+          //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+          //
+          // Set frame marking data
+          header->extension.frameMarks.startOfFrame = (ptr[0] & 0x80) != 0;
+          header->extension.frameMarks.endOfFrame = (ptr[0] & 0x40) != 0;
+          header->extension.frameMarks.independent = (ptr[0] & 0x20) != 0;
+          header->extension.frameMarks.discardable = (ptr[0] & 0x10) != 0;
+
+          // Check variable length
+          if (len==1) {
+            // We are non-scalable
+            header->extension.frameMarks.baseLayerSync = 0;
+            header->extension.frameMarks.temporalLayerId = 0;
+            header->extension.frameMarks.spatialLayerId = 0;
+            header->extension.frameMarks.tl0PicIdx = 0;
+          } else if (len==3) {
+            // Set scalable parts
+            header->extension.frameMarks.baseLayerSync = (ptr[0] & 0x08) != 0;
+            header->extension.frameMarks.temporalLayerId = (ptr[0] & 0x07) != 0;
+            header->extension.frameMarks.spatialLayerId = ptr[1];
+            header->extension.frameMarks.tl0PicIdx = ptr[2];
+          }
           break;
         }
         case kRtpExtensionNone:

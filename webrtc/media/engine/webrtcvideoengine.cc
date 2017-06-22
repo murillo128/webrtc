@@ -429,6 +429,9 @@ RtpCapabilities WebRtcVideoEngine::GetCapabilities() const {
   capabilities.header_extensions.push_back(
         webrtc::RtpExtension(webrtc::RtpExtension::kVideoTimingUri,
                              webrtc::RtpExtension::kVideoTimingDefaultId));
+  capabilities.header_extensions.push_back(
+      webrtc::RtpExtension(webrtc::RtpExtension::kFrameMarkingUri,
+                           webrtc::RtpExtension::kFrameMarkingDefaultId));
   return capabilities;
 }
 
