@@ -445,9 +445,9 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
     frame_marks.endOfFrame = last;
 
     // Only add frame marking for known codecs
-   if (frame_marking_enabled)
-       // Update extension header for frame marking
-       packet->SetExtension<FrameMarking>(frame_marks);
+    if (frame_marking_enabled)
+      // Update extension header for frame marking
+      packet->SetExtension<FrameMarking>(frame_marks);
 
     if (!rtp_sender_->AssignSequenceNumber(packet.get()))
       return false;

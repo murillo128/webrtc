@@ -497,7 +497,7 @@ void RtpHeaderParser::ParseOneByteExtensionHeader(
           //
           // https://tools.ietf.org/html/draft-ietf-avtext-framemarking-04
           // This extensions provides meta-information about the RTP streams
-          // outside the encrypted media payload, an RTP switch can do 
+          // outside the encrypted media payload, an RTP switch can do
           // codec-agnostic selective forwarding without decrypting the payload
           //
           // for Non-Scalable Streams
