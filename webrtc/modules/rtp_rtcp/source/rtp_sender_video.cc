@@ -301,53 +301,8 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
   rtp_header->SetPayloadType(payload_type);
   rtp_header->SetTimestamp(rtp_timestamp);
   rtp_header->set_capture_time_ms(capture_time_ms);
-  auto last_packet = rtc::MakeUnique<RtpPacketToSend>(*rtp_header);
-
-  size_t fec_packet_overhead;
-  bool red_enabled;
-  int32_t retransmission_settings;
-  {
-    rtc::CritScope cs(&crit_);
-    // According to
-    // http://www.etsi.org/deliver/etsi_ts/126100_126199/126114/12.07.00_60/
-    // ts_126114v120700p.pdf Section 7.4.5:
-    // The MTSI client shall add the payload bytes as defined in this clause
-    // onto the last RTP packet in each group of packets which make up a key
-    // frame (I-frame or IDR frame in H.264 (AVC), or an IRAP picture in H.265
-    // (HEVC)). The MTSI client may also add the payload bytes onto the last RTP
-    // packet in each group of packets which make up another type of frame
-    // (e.g. a P-Frame) only if the current value is different from the previous
-    // value sent.
-    if (video_header) {
-      // Set rotation when key frame or when changed (to follow standard).
-      // Or when different from 0 (to follow current receiver implementation).
-      VideoRotation current_rotation = video_header->rotation;
-      if (frame_type == kVideoFrameKey || current_rotation != last_rotation_ ||
-          current_rotation != kVideoRotation_0)
-        last_packet->SetExtension<VideoOrientation>(current_rotation);
-      last_rotation_ = current_rotation;
-      // Report content type only for key frames.
-      if (frame_type == kVideoFrameKey &&
-          video_header->content_type != VideoContentType::UNSPECIFIED) {
-        last_packet->SetExtension<VideoContentTypeExtension>(
-            video_header->content_type);
-      }
-    }
-
-    // FEC settings.
-    const FecProtectionParams& fec_params =
-        frame_type == kVideoFrameKey ? key_fec_params_ : delta_fec_params_;
-    if (flexfec_enabled())
-      flexfec_sender_->SetFecParameters(fec_params);
-    if (ulpfec_enabled())
-      ulpfec_generator_.SetFecParameters(fec_params);
-
-    fec_packet_overhead = CalculateFecPacketOverhead();
-    red_enabled = this->red_enabled();
-    retransmission_settings = retransmission_settings_;
-  }
-
-  // Set Frame Marks
+  
+   // Set Frame Marks
   FrameMarks frame_marks;
   bool frame_marking_enabled = true;
 
@@ -395,6 +350,52 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
    if (frame_marking_enabled)
        // Add extension header for frame marking
        rtp_header->SetExtension<FrameMarking>(frame_marks);
+  
+  auto last_packet = rtc::MakeUnique<RtpPacketToSend>(*rtp_header);
+
+  size_t fec_packet_overhead;
+  bool red_enabled;
+  int32_t retransmission_settings;
+  {
+    rtc::CritScope cs(&crit_);
+    // According to
+    // http://www.etsi.org/deliver/etsi_ts/126100_126199/126114/12.07.00_60/
+    // ts_126114v120700p.pdf Section 7.4.5:
+    // The MTSI client shall add the payload bytes as defined in this clause
+    // onto the last RTP packet in each group of packets which make up a key
+    // frame (I-frame or IDR frame in H.264 (AVC), or an IRAP picture in H.265
+    // (HEVC)). The MTSI client may also add the payload bytes onto the last RTP
+    // packet in each group of packets which make up another type of frame
+    // (e.g. a P-Frame) only if the current value is different from the previous
+    // value sent.
+    if (video_header) {
+      // Set rotation when key frame or when changed (to follow standard).
+      // Or when different from 0 (to follow current receiver implementation).
+      VideoRotation current_rotation = video_header->rotation;
+      if (frame_type == kVideoFrameKey || current_rotation != last_rotation_ ||
+          current_rotation != kVideoRotation_0)
+        last_packet->SetExtension<VideoOrientation>(current_rotation);
+      last_rotation_ = current_rotation;
+      // Report content type only for key frames.
+      if (frame_type == kVideoFrameKey &&
+          video_header->content_type != VideoContentType::UNSPECIFIED) {
+        last_packet->SetExtension<VideoContentTypeExtension>(
+            video_header->content_type);
+      }
+    }
+
+    // FEC settings.
+    const FecProtectionParams& fec_params =
+        frame_type == kVideoFrameKey ? key_fec_params_ : delta_fec_params_;
+    if (flexfec_enabled())
+      flexfec_sender_->SetFecParameters(fec_params);
+    if (ulpfec_enabled())
+      ulpfec_generator_.SetFecParameters(fec_params);
+
+    fec_packet_overhead = CalculateFecPacketOverhead();
+    red_enabled = this->red_enabled();
+    retransmission_settings = retransmission_settings_;
+  }
 
   size_t packet_capacity = rtp_sender_->MaxRtpPacketSize() -
                            fec_packet_overhead -
