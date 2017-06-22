@@ -361,8 +361,7 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
   frame_marks.independent = (frame_type == kVideoFrameKey);
 
   // Codec specific
-  switch (video_type)
-  {
+  switch (video_type) {
     case kRtpVideoH264:
       // Nothing to add
       frame_marks.discardable = false;
@@ -397,9 +396,9 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
       frame_marking_enabled = false;
   }
   // Only add frame marking for known codecs
-   if (frame_marking_enabled)
-       // Add extension header for frame marking
-       rtp_header->SetExtension<FrameMarking>(frame_marks);
+  if (frame_marking_enabled)
+      // Add extension header for frame marking
+      rtp_header->SetExtension<FrameMarking>(frame_marks);
 
   size_t packet_capacity = rtp_sender_->MaxRtpPacketSize() -
                            fec_packet_overhead -

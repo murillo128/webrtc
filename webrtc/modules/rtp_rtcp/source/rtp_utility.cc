@@ -497,24 +497,24 @@ void RtpHeaderParser::ParseOneByteExtensionHeader(
           //
           // https://tools.ietf.org/html/draft-ietf-avtext-framemarking-04
           // This extensions provides meta-information about the RTP streams
-	  // outside the encrypted media payload, an RTP switch can do 
-	  // codec-agnostic selective forwarding without decrypting the payload
+          // outside the encrypted media payload, an RTP switch can do 
+          // codec-agnostic selective forwarding without decrypting the payload
           //
           // for Non-Scalable Streams
           //
-          //     0                   1
-          //     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
-          //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-          //    |  ID=? |  L=0  |S|E|I|D|0 0 0 0|
-          //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+          //    0                   1
+          //    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
+          //   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+          //   |  ID=? |  L=0  |S|E|I|D|0 0 0 0|
+          //   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
           //
           // for Scalable Streams
           //
-          //     0                   1                   2                   3
-          //     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-          //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-          //    |  ID=? |  L=2  |S|E|I|D|B| TID |   LID         |    TL0PICIDX  |
-          //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+          //    0                   1                   2                   3
+          //    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+          //   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+          //   |  ID=? |  L=2  |S|E|I|D|B| TID |   LID         |    TL0PICIDX  |
+          //   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
           //
           // Set frame marking data
           header->extension.frameMarks.startOfFrame = (ptr[0] & 0x80) != 0;
