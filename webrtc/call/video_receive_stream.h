@@ -240,6 +240,10 @@ class VideoReceiveStream {
   virtual void AddSecondarySink(RtpPacketSinkInterface* sink) = 0;
   virtual void RemoveSecondarySink(const RtpPacketSinkInterface* sink) = 0;
 
+  // End to End media encryption
+  virtual bool SetMediaCryptoKey(
+      const rtc::Optional<MediaCryptoKey> &media_crypto_key) = 0;
+
  protected:
   virtual ~VideoReceiveStream() {}
 };

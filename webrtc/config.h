@@ -16,14 +16,21 @@
 #include <string>
 #include <vector>
 
-#include "webrtc/common_types.h"
-#include "webrtc/rtc_base/basictypes.h"
-#include "webrtc/rtc_base/optional.h"
-#include "webrtc/rtc_base/refcount.h"
-#include "webrtc/rtc_base/scoped_ref_ptr.h"
-#include "webrtc/typedefs.h"
+#include "webrtc/base/basictypes.h"
+#include "webrtc/base/optional.h"
+#include "webrtc/base/refcount.h"
+#include "webrtc/base/scoped_ref_ptr.h"
+#include "webrtc/base/sslstreamadapter.h"
 
 namespace webrtc {
+
+// End to end media encryption	
+class MediaCryptoKey {
+ public:	
+  int type = rtc::SRTP_INVALID_CRYPTO_SUITE;
+  std::vector<uint8_t> buffer;
+  bool Parse(const std::string &suite, const std::string &str);
+};
 
 // Settings for NACK, see RFC 4585 for details.
 struct NackConfig {

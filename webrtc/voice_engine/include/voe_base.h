@@ -38,6 +38,7 @@
 #include "webrtc/common_types.h"
 #include "webrtc/modules/audio_coding/include/audio_coding_module.h"
 #include "webrtc/rtc_base/scoped_ref_ptr.h"
+#include "webrtc/modules/rtp_rtcp/source/media_crypto.h"
 
 namespace webrtc {
 

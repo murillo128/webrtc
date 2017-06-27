@@ -280,4 +280,48 @@ void VideoEncoderConfig::Vp9EncoderSpecificSettings::FillVideoCodecVp9(
   *vp9_settings = specifics_;
 }
 
+
+bool MediaCryptoKey::Parse(const std::string &suite, const std::string &str) {
+  size_t len;
+
+  //Get suite from name
+  int crypto_suite = rtc::SrtpCryptoSuiteFromName(suite);
+  
+  if (crypto_suite == rtc::SRTP_INVALID_CRYPTO_SUITE) {
+    LOG(LS_WARNING) << "Failed to parse MediaCryptoKey: invalid suite "
+                    << suite;
+    return false;
+  }
+  
+  // Decode the key
+  if (!rtc::Base64::DecodeFromArray(str.c_str(), str.length(),
+    rtc::Base64::DecodeOption::DO_STRICT, &buffer,&len)) {
+    LOG(LS_WARNING) << "Failed to parse MediaCryptoKey: base64 decode failed";
+    return false;
+  }
+  
+  // Check ley size
+  int expected_key_len;
+  int expected_salt_len;
+  if (!rtc::GetSrtpKeyAndSaltLengths(crypto_suite, &expected_key_len,
+      &expected_salt_len)) {
+    // This should never happen.
+    LOG(LS_WARNING) << "Failed to parse MediaCryptoKey: unsupported"
+                    << " cipher suite without length information "
+                    << crypto_suite;
+    return false;
+  }
+  
+  size_t expected = static_cast<size_t>(expected_key_len + expected_salt_len);
+  if ( buffer.size() != expected) {
+    LOG(LS_WARNING) << "Failed to create SRTP session: invalid key,"
+                    << " key length" << buffer.size()
+                    << " expected" << expected;
+    return false;
+  }
+
+  type = crypto_suite;
+  return true;
+}
+
 }  // namespace webrtc

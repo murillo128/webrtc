@@ -392,6 +392,10 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
     if (!rtp_sender_->AssignSequenceNumber(packet.get()))
       return false;
 
+    // End to End media encryption
+    if (!rtp_sender_->MediaEncrypt(packet.get()))
+      return false;
+
     bool protect_packet = (packetizer->GetProtectionType() == kProtectedPacket);
     // Put packetization finish timestamp into extension.
     if (packet->HasExtension<VideoTimingExtension>()) {

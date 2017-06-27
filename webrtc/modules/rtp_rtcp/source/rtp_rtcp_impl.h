@@ -295,6 +295,8 @@ class ModuleRtpRtcpImpl : public RtpRtcp, public RTCPReceiver::ModuleRtpRtcp {
   void OnRequestSendReport() override;
 
   void SetVideoBitrateAllocation(const BitrateAllocation& bitrate) override;
+  
+  bool SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey> &media_crypto_key) override;
 
  protected:
   bool UpdateRTCPReceiveInformationTimers();

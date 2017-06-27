@@ -72,7 +72,8 @@ RtpReceiverImpl::RtpReceiverImpl(Clock* clock,
       current_remote_csrc_(),
       last_received_timestamp_(0),
       last_received_frame_time_ms_(-1),
-      last_received_sequence_number_(0) {
+      last_received_sequence_number_(0),
+      media_crypto_enabled_(false) {
   assert(incoming_messages_callback);
 
   memset(current_remote_csrc_, 0, sizeof(current_remote_csrc_));
@@ -181,7 +182,8 @@ bool RtpReceiverImpl::IncomingRtpPacket(
 
   int32_t ret_val = rtp_media_receiver_->ParseRtpPacket(
       &webrtc_rtp_header, payload_specific, is_red, payload, payload_length,
-      clock_->TimeInMilliseconds(), is_first_packet_in_frame);
+      clock_->TimeInMilliseconds(), is_first_packet_in_frame,
+      media_crypto_enabled_ ? &media_crypto_ : nullptr);
 
   if (ret_val < 0) {
     return false;
@@ -550,4 +552,16 @@ void RtpReceiverImpl::RemoveOutdatedSources(int64_t now_ms) {
   ssrc_sources_.erase(ssrc_sources_.begin(), vec_it);
 }
 
+bool RtpReceiverImpl::SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey> &key) {
+  
+  LOG(LS_INFO) << "Setting End to End Media Encryption";
+  
+  rtc::CritScope cs(&critical_section_rtp_receiver_);
+  if (key) {
+    media_crypto_enabled_ = media_crypto_.SetInboundKey(*key);
+  } else {
+    media_crypto_enabled_ = false;
+  }
+  return media_crypto_enabled_;
+}
 }  // namespace webrtc

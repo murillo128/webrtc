@@ -125,6 +125,9 @@ class ChannelProxy : public RtpPacketSinkInterface {
       float recoverable_packet_loss_rate);
   virtual void RegisterLegacyReceiveCodecs();
   virtual std::vector<webrtc::RtpSource> GetSources() const;
+  // End to end media crypto
+  virtual bool SetMediaCryptoKey(
+    const rtc::Optional<MediaCryptoKey> &media_crypto_key);
 
  private:
   Channel* channel() const;

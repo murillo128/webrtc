@@ -21,6 +21,7 @@
 #include "webrtc/call/syncable.h"
 #include "webrtc/rtc_base/constructormagic.h"
 #include "webrtc/rtc_base/thread_checker.h"
+#include "webrtc/modules/rtp_rtcp/include/rtp_rtcp.h"
 
 namespace webrtc {
 class PacketRouter;
@@ -79,6 +80,8 @@ class AudioReceiveStream final : public webrtc::AudioReceiveStream,
   bool DeliverRtcp(const uint8_t* packet, size_t length);
   const webrtc::AudioReceiveStream::Config& config() const;
 
+  // End to end media crypto
+  bool SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey> &media_crypto_key);
  private:
   VoiceEngine* voice_engine() const;
   AudioState* audio_state() const;

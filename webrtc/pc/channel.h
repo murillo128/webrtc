@@ -199,6 +199,9 @@ class BaseChannel
   // TODO(zstein): Remove this once channels register themselves with
   // an RtpTransport in a more explicit way.
   bool HandlesPayloadType(int payload_type) const;
+  
+  // End to end media encryption
+  bool SetMediaCryptoKey(const rtc::Optional<webrtc::MediaCryptoKey> &key);
 
  protected:
   virtual MediaChannel* media_channel() const { return media_channel_; }

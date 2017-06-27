@@ -134,7 +134,8 @@ int32_t RTPReceiverAudio::ParseRtpPacket(WebRtcRTPHeader* rtp_header,
                                          const uint8_t* payload,
                                          size_t payload_length,
                                          int64_t timestamp_ms,
-                                         bool is_first_packet) {
+                                         bool is_first_packet,
+                                         MediaCrypto* media_crypto) {
   TRACE_EVENT2(TRACE_DISABLED_BY_DEFAULT("webrtc_rtp"), "Audio::ParseRtp",
                "seqnum", rtp_header->header.sequenceNumber, "timestamp",
                rtp_header->header.timestamp);
@@ -155,7 +156,8 @@ int32_t RTPReceiverAudio::ParseRtpPacket(WebRtcRTPHeader* rtp_header,
                                  payload,
                                  payload_length,
                                  specific_payload.Audio,
-                                 is_red);
+                                 is_red,
+                                 media_crypto);
 }
 
 RTPAliveType RTPReceiverAudio::ProcessDeadOrAlive(
@@ -211,9 +213,10 @@ int32_t RTPReceiverAudio::ParseAudioCodecSpecific(
     const uint8_t* payload_data,
     size_t payload_length,
     const AudioPayload& audio_specific,
-    bool is_red) {
+    bool is_red,
+    MediaCrypto* media_crypto) {
   RTC_DCHECK_GE(payload_length, rtp_header->header.paddingLength);
-  const size_t payload_data_length =
+  size_t payload_data_length =
       payload_length - rtp_header->header.paddingLength;
   if (payload_data_length == 0) {
     rtp_header->type.Audio.isCNG = false;
@@ -300,12 +303,24 @@ int32_t RTPReceiverAudio::ParseAudioCodecSpecific(
   if (is_red && !(payload_data[0] & 0x80)) {
     // we recive only one frame packed in a RED packet remove the RED wrapper
     rtp_header->header.payloadType = payload_data[0];
-
+      
+    if (media_crypto) {
+      size_t len = payload_data_length - 1;
+      if (!media_crypto->Decrypt((uint8_t*)payload_data + 1, &len))
+        return -1;
+      payload_data_length = len + 1;
+    }
+    
     // only one frame in the RED strip the one byte to help NetEq
     return data_callback_->OnReceivedPayloadData(
         payload_data + 1, payload_data_length - 1, rtp_header);
   }
-
+  
+  if (media_crypto) {
+    if (!media_crypto->Decrypt((uint8_t*)payload_data, &payload_data_length))
+      return -1;
+  }
+    
   rtp_header->type.Audio.channel = audio_specific.channels;
   return data_callback_->OnReceivedPayloadData(payload_data,
                                                payload_data_length, rtp_header);

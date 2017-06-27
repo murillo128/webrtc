@@ -150,6 +150,10 @@ class AudioSendStream {
   virtual void SetMuted(bool muted) = 0;
 
   virtual Stats GetStats() const = 0;
+
+  // End to End media encryption
+  virtual bool SetMediaCryptoKey(
+      const rtc::Optional<MediaCryptoKey> &media_crypto_key) = 0;
 };
 }  // namespace webrtc
 

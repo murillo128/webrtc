@@ -50,7 +50,8 @@ class RTPReceiverAudio : public RTPReceiverStrategy,
                          const uint8_t* packet,
                          size_t payload_length,
                          int64_t timestamp_ms,
-                         bool is_first_packet) override;
+                         bool is_first_packet,
+			 MediaCrypto* media_crypto) override;
 
   RTPAliveType ProcessDeadOrAlive(uint16_t last_payload_length) const override;
 
@@ -77,7 +78,8 @@ class RTPReceiverAudio : public RTPReceiverStrategy,
                                   const uint8_t* payload_data,
                                   size_t payload_length,
                                   const AudioPayload& audio_specific,
-                                  bool is_red);
+                                  bool is_red,
+			          MediaCrypto* media_crypto);
 
   bool telephone_event_forward_to_decoder_;
   int8_t telephone_event_payload_type_;
