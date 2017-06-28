@@ -46,7 +46,7 @@ class RTPReceiverStrategy {
                                  size_t payload_length,
                                  int64_t timestamp_ms,
                                  bool is_first_packet,
-				 MediaCrypto *media_crypto) = 0;
+                                 MediaCrypto* media_crypto) = 0;
 
   virtual TelephoneEventHandler* GetTelephoneEventHandler() = 0;
 

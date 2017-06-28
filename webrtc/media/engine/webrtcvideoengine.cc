@@ -1830,8 +1830,8 @@ bool WebRtcVideoChannel::WebRtcVideoSendStream::SetRtpParameters(
   }
 
   // Parse End to End media crypto key
-  if (!rtp_parameters_.media_crypto_key.empty () &&
-    !rtp_parameters_.media_crypto_suite.empty ()) {
+  if (!rtp_parameters_.media_crypto_key.empty() &&
+      !rtp_parameters_.media_crypto_suite.empty()) {
     webrtc::MediaCryptoKey key;
     if (!key.Parse(rtp_parameters_.media_crypto_suite,
       rtp_parameters_.media_crypto_key))
@@ -1839,7 +1839,7 @@ bool WebRtcVideoChannel::WebRtcVideoSendStream::SetRtpParameters(
     LOG(LS_INFO) << "Enabling End to End Media Encryption with key "
       << rtp_parameters_.media_crypto_key << " and suite "
       << rtp_parameters_.media_crypto_suite;
-    
+
     SetMediaCryptoKey(rtc::Optional<webrtc::MediaCryptoKey>(key));
   }
 
@@ -2359,12 +2359,11 @@ void WebRtcVideoChannel::WebRtcVideoReceiveStream::SetRecvParameters(
 
 bool WebRtcVideoChannel::WebRtcVideoReceiveStream::SetRtpParameters(
     const webrtc::RtpParameters& parameters) {
-  
   // TODO: Update the rest of rtp parameters accordingly
-  
+
   // Parse End to End media crypto key
-  if (!parameters.media_crypto_key.empty () &&
-    !parameters.media_crypto_suite.empty ()) {
+  if (!parameters.media_crypto_key.empty() &&
+      !parameters.media_crypto_suite.empty()) {
     webrtc::MediaCryptoKey key;
     if (!key.Parse(parameters.media_crypto_suite,
       parameters.media_crypto_key))
@@ -2372,7 +2371,7 @@ bool WebRtcVideoChannel::WebRtcVideoReceiveStream::SetRtpParameters(
     LOG(LS_INFO) << "Enabling End to End Media Encryption with key "
       << parameters.media_crypto_key << " and suite "
       << parameters.media_crypto_suite;
-    
+
     SetMediaCryptoKey(rtc::Optional<webrtc::MediaCryptoKey>(key));
   }
 

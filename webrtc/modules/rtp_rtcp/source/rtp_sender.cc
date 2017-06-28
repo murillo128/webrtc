@@ -1304,7 +1304,7 @@ void RTPSender::SendKeepAlive(uint8_t payload_type) {
 
 bool RTPSender::SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey> &key) {
   LOG(LS_INFO) << "Setting End to End Media Encryption";
-  
+
   rtc::CritScope cs(&send_critsect_);
   if (key) {
     media_crypto_enabled_ = media_crypto_.SetOutboundKey(*key);
@@ -1314,17 +1314,15 @@ bool RTPSender::SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey> &key) {
   return  media_crypto_enabled_;
 }
 
-bool RTPSender::MediaEncrypt(rtp::Packet *packet)
-{
+bool RTPSender::MediaEncrypt(rtp::Packet *packet) {
   if (media_crypto_enabled_)
     return media_crypto_.Encrypt(packet);
   return true;
 }
 
-size_t RTPSender::GetMediaEncryptionOverhead()
-{
- if (media_crypto_enabled_)
+size_t RTPSender::GetMediaEncryptionOverhead() {
+  if (media_crypto_enabled_)
     return media_crypto_.GetEncryptionOverhead();
-  return 0;	
+  return 0;
 }
 }  // namespace webrtc

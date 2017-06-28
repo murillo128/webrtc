@@ -312,7 +312,7 @@ bool PeerConnectionInterface::RTCConfiguration::operator==(
          redetermine_role_on_ice_restart == o.redetermine_role_on_ice_restart &&
          ice_check_min_interval == o.ice_check_min_interval &&
          ice_regather_interval_range == o.ice_regather_interval_range &&
-         media_crypto_suite == o.media_crypto_suite && 
+         media_crypto_suite == o.media_crypto_suite &&
          media_crypto_key == o.media_crypto_key;
 }
 

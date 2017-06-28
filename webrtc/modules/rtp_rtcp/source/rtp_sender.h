@@ -331,11 +331,11 @@ class RTPSender {
   OverheadObserver* overhead_observer_;
 
   const bool send_side_bwe_with_overhead_;
-  
+
   // End to end media encryption
   bool media_crypto_enabled_;
   MediaCrypto media_crypto_;
-  
+
   RTC_DISALLOW_IMPLICIT_CONSTRUCTORS(RTPSender);
 };
 

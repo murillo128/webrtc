@@ -1221,7 +1221,6 @@ bool BaseChannel::SetRtcpMux_n(bool enable,
             transport_name_.empty()
                 ? rtp_transport_->rtp_packet_transport()->debug_name()
                 : transport_name_;
-        ;
         LOG(LS_INFO) << "Enabling rtcp-mux for " << content_name()
                      << "; no longer need RTCP transport for " << debug_name;
         if (rtp_transport_->rtcp_packet_transport()) {

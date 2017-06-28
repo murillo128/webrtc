@@ -538,12 +538,12 @@ bool WebRtcSession::Initialize(
     const PeerConnectionInterface::RTCConfiguration& rtc_configuration) {
 
   // Parse E2E media crypto key
-  if (!rtc_configuration.media_crypto_key.empty () &&
-    !rtc_configuration.media_crypto_suite.empty ()) {
+  if (!rtc_configuration.media_crypto_key.empty() &&
+      !rtc_configuration.media_crypto_suite.empty()) {
     MediaCryptoKey key;
     if (!key.Parse(rtc_configuration.media_crypto_suite,
-      rtc_configuration.media_crypto_key))
-        return false;
+        rtc_configuration.media_crypto_key))
+      return false;
     LOG(LS_INFO) << "Enabling E2E Media Encryption with key "
       << rtc_configuration.media_crypto_key << " and suite "
       << rtc_configuration.media_crypto_suite;
@@ -1874,7 +1874,7 @@ bool WebRtcSession::CreateDataChannel(const cricket::ContentInfo* content,
             RTC_FROM_HERE, rtc::Bind(&WebRtcSession::CreateSctpTransport_n,
                                      this, content->name, transport_name))) {
       return false;
-    };
+    }
   } else {
     bool require_rtcp_mux =
         rtcp_mux_policy_ == PeerConnectionInterface::kRtcpMuxPolicyRequire;

@@ -443,7 +443,7 @@ struct RtpParameters {
   // TODO(deadbeef): Not implemented.
   DegradationPreference degradation_preference =
       DegradationPreference::BALANCED;
-  
+
   // End to end media encryption key and cipher suite
   std::string media_crypto_key;
   std::string media_crypto_suite;

@@ -722,8 +722,7 @@ void RtpVideoStreamReceiver::InsertSpsPpsIntoTracker(uint8_t payload_type) {
 }
 
 bool RtpVideoStreamReceiver::SetMediaCryptoKey(
-    const rtc::Optional<MediaCryptoKey> &media_crypto_key)
-{
+    const rtc::Optional<MediaCryptoKey> &media_crypto_key) {
   return rtp_rtcp_->SetMediaCryptoKey(media_crypto_key) &&
     rtp_receiver_->SetMediaCryptoKey(media_crypto_key);
 }

@@ -377,7 +377,7 @@ class WebRtcVideoChannel : public VideoMediaChannel, public webrtc::Transport {
     AllocatedEncoder allocated_encoder_ ACCESS_ON(&thread_checker_);
 
     bool sending_ ACCESS_ON(&thread_checker_);
-          
+
     // End to End media encryption
     rtc::Optional<webrtc::MediaCryptoKey> media_crypto_key_;
   };
@@ -408,18 +408,18 @@ class WebRtcVideoChannel : public VideoMediaChannel, public webrtc::Transport {
                                webrtc::RtcpMode rtcp_mode);
     void SetRecvParameters(const ChangedRecvParameters& recv_params);
     bool SetRtpParameters(const webrtc::RtpParameters& parameters);
-    
+
     void OnFrame(const webrtc::VideoFrame& frame) override;
     bool IsDefaultStream() const;
 
     void SetSink(rtc::VideoSinkInterface<webrtc::VideoFrame>* sink);
 
     VideoReceiverInfo GetVideoReceiverInfo(bool log_stats);
-    
+
     // End to end media crypto
     bool SetMediaCryptoKey(
       const rtc::Optional<webrtc::MediaCryptoKey> &media_crypto_key);
-    
+
    private:
     struct AllocatedDecoder {
       AllocatedDecoder(webrtc::VideoDecoder* decoder,

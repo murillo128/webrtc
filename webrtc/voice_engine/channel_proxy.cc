@@ -355,7 +355,7 @@ bool ChannelProxy::SetMediaCryptoKey(
   RtpReceiver* rtp_receiver;
   if (channel()->GetRtpRtcp(&rtp_rtcp, &rtp_receiver) != 0)
     return false;
-  return rtp_rtcp->SetMediaCryptoKey(media_crypto_key) 
+  return rtp_rtcp->SetMediaCryptoKey(media_crypto_key)
     && rtp_receiver->SetMediaCryptoKey(media_crypto_key);
 }
 }  // namespace voe

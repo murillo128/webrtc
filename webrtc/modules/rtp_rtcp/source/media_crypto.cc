@@ -8,8 +8,6 @@
  *  be found in the AUTHORS file in the root of the source tree.
  */
 
-#include "webrtc/modules/rtp_rtcp/source/media_crypto.h"
-
 #include <string.h>
 
 #include "third_party/libsrtp/include/srtp.h"
@@ -61,7 +59,6 @@ bool MediaCrypto::SetInboundKey(const MediaCryptoKey& key) {
 }
 
 bool MediaCrypto::SetKey(int type, int cs, const uint8_t* key, size_t len) {
-
   if (session_) {
     LOG(LS_ERROR) << "Failed to create MediaCrypto SRTP session: "
                   << "SRTP session already created";
@@ -77,10 +74,10 @@ bool MediaCrypto::SetKey(int type, int cs, const uint8_t* key, size_t len) {
     // RTP HMAC is shortened to 32 bits, but RTCP remains 80 bits.
     srtp_crypto_policy_set_aes_cm_128_hmac_sha1_32(&policy.rtp);
     srtp_crypto_policy_set_aes_cm_128_hmac_sha1_80(&policy.rtcp);
-  } else if (cs == rtc::SRTP_AEAD_AES_128_GCM ) {
+  } else if (cs == rtc::SRTP_AEAD_AES_128_GCM) {
     srtp_crypto_policy_set_aes_gcm_128_16_auth(&policy.rtp);
     srtp_crypto_policy_set_aes_gcm_128_16_auth(&policy.rtcp);
-  } else if (cs == rtc::SRTP_AEAD_AES_256_GCM ) {
+  } else if (cs == rtc::SRTP_AEAD_AES_256_GCM) {
     srtp_crypto_policy_set_aes_gcm_256_16_auth(&policy.rtp);
     srtp_crypto_policy_set_aes_gcm_256_16_auth(&policy.rtcp);
   } else {
@@ -152,7 +149,6 @@ bool MediaCrypto::ProtectRtp(void* p, int in_len, int max_len, int* out_len) {
 
 
 bool MediaCrypto::UnprotectRtp(void* p, int in_len, int* out_len) {
-
   if (!session_) {
     LOG(LS_WARNING) << "Failed to unprotect MediaCrypto SRTP packet:"
                     << " no SRTP Session";
@@ -172,27 +168,26 @@ bool MediaCrypto::UnprotectRtp(void* p, int in_len, int* out_len) {
   return true;
 }
 
-size_t MediaCrypto::GetEncryptionOverhead()
-{
-  if (!session_)
+size_t MediaCrypto::GetEncryptionOverhead() {
+  if (!session_) {
     return 0;
+  }
 
   return ohb_size + rtp_auth_tag_len_;
 }
 
-bool MediaCrypto::Encrypt(rtp::Packet *packet)
-{
-   if (!session_) {
-    LOG(LS_WARNING) << "Failed to encrypt MediaCrypto RTP packet:"
+bool MediaCrypto::Encrypt(rtp::Packet *packet) {
+  if (!session_) {
+     LOG(LS_WARNING) << "Failed to encrypt MediaCrypto RTP packet:"
                     << " no SRTP Session";
-    return false;
+     return false;
   }
 
   // Calculate payload size for encrypted version
-  size_t encrypted_payload_size = 
+  size_t encrypted_payload_size =
     ohb_size + packet->payload_size() + rtp_auth_tag_len_;
 
-  //Check it is enought
+  // Check it is enought
   if (encrypted_payload_size > packet->MaxPayloadSize()) {
     LOG(LS_WARNING) << "Failed to perform End to End media encryption"
       << " encrypted size will exceed max payload size available";
@@ -200,11 +195,11 @@ bool MediaCrypto::Encrypt(rtp::Packet *packet)
   }
   // Alloc temporal buffer for encryption
   size_t size = encrypted_payload_size + 1;
-  uint8_t* inner = (uint8_t*) malloc(size);
+  uint8_t* inner = reinterpret_cast<uint8_t*>(malloc(size));
 
-  //Get packet values
-  bool mark = packet->Marker ();
-  uint8_t pt = packet->PayloadType ();
+  // Get packet values
+  bool mark = packet->Marker();
+  uint8_t pt = packet->PayloadType();
   uint16_t seq = packet->SequenceNumber();
   uint32_t ts = packet->Timestamp();
   uint32_t ssrc = packet->Ssrc();
@@ -214,7 +209,7 @@ bool MediaCrypto::Encrypt(rtp::Packet *packet)
 
   // marker & pt
   inner[1] = mark ? 0x80 | pt : pt;
-  //SEQ
+  // SEQ
   inner[2] = seq >> 8;
   inner[3] = seq;
   // TS
@@ -228,7 +223,7 @@ bool MediaCrypto::Encrypt(rtp::Packet *packet)
   inner[10] = ssrc >> 8;
   inner[11] = ssrc;
 
-  //Copy the rest of the payload
+  // Copy the rest of the payload
   memcpy(inner + 1 + ohb_size,
          packet->payload().data(),
          packet->payload_size());
@@ -239,7 +234,7 @@ bool MediaCrypto::Encrypt(rtp::Packet *packet)
                            1 + ohb_size + packet->payload_size(),
                            size,
                            &out_len);
-  //Set encrypted payload
+  // Set encrypted payload
   if (result) {
     // Allocate new payload size
     uint8_t* buffer = packet->AllocatePayload(out_len - 1);
@@ -256,19 +251,19 @@ bool MediaCrypto::Encrypt(rtp::Packet *packet)
     }
   }
 
-  //Free aux
+  // Free aux
   free(inner);
 
   return result;
 }
 
-bool MediaCrypto::Decrypt(uint8_t* payload,size_t* payload_length) {
-   if (!session_) {
+bool MediaCrypto::Decrypt(uint8_t* payload, size_t* payload_length) {
+  if (!session_) {
     LOG(LS_WARNING) << "Failed to decrypt MediaCrypto RTP packet:"
                     << " no SRTP Session";
     return false;
-  }	
-  //Check we have enought data on payload
+  }
+  // Check we have enought data on payload
   if (*payload_length < ohb_size + rtp_auth_tag_len_) {
     LOG(LS_WARNING) << "Failed to perform End to End media encryption"
                     << " encrypted payload is smaller than the minimum";
@@ -276,9 +271,9 @@ bool MediaCrypto::Decrypt(uint8_t* payload,size_t* payload_length) {
   }
 
   // Alloc temporal buffer for decryption
-  uint8_t* inner = (uint8_t*) malloc(*payload_length + 1);
+  uint8_t* inner = reinterpret_cast<uint8_t*>(malloc(*payload_length + 1));
 
-   // Reconstruct RTP header
+  // Reconstruct RTP header
   inner[0] = 0x80;
   // Copy the rest of the header
   memcpy(inner + 1, payload, *payload_length);
@@ -289,7 +284,7 @@ bool MediaCrypto::Decrypt(uint8_t* payload,size_t* payload_length) {
                            1 + *payload_length,
                            &out_length);
 
-  //Set decyrpted payload
+  // Set decyrpted payload
   if (result) {
     // Remove the OHB data
     *payload_length = out_length - ohb_size - 1;
@@ -300,10 +295,10 @@ bool MediaCrypto::Decrypt(uint8_t* payload,size_t* payload_length) {
     result = false;
   }
 
-  //Free aux
+  // Free aux
   free(inner);
 
   return result;
 }
 
-}
+}  // namespace webrtc
