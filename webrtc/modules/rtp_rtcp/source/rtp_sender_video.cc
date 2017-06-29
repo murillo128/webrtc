@@ -380,8 +380,7 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
       frame_marks.discardable = false;
       frame_marks.temporal_layer_id =
           video_header->codecHeader.VP9.temporal_idx;
-      frame_marks.spatial_layer_id =
-          video_header->codecHeader.VP9.spatial_idx;
+      frame_marks.spatial_layer_id = video_header->codecHeader.VP9.spatial_idx;
       frame_marks.tl0_pic_idx = video_header->codecHeader.VP9.tl0_pic_idx;
       break;
     default:
