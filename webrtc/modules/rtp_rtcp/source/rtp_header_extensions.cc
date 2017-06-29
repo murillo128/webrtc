@@ -422,7 +422,7 @@ bool FrameMarking::Parse(rtc::ArrayView<const uint8_t> data,
   // Check variable length.
   if (data.size() == 1) {
     // We are non-scalable.
-    frame_marks->base_layer_sync = 0;
+    frame_marks->base_layer_sync = false;
     frame_marks->temporal_layer_id = 0;
     frame_marks->spatial_layer_id = 0;
     frame_marks->tl0_pic_idx = 0;
@@ -447,7 +447,7 @@ size_t FrameMarking::ValueSize(const FrameMarks& frame_marks) {
       (frame_marks.spatial_layer_id &&
        frame_marks.spatial_layer_id != kNoSpatialIdx) ||
       (frame_marks.tl0_pic_idx &&
-       frame_marks.tl0_pic_idx != (uint8_t)kNoTl0PicIdx))
+       frame_marks.tl0_pic_idx != static_cast<uint8_t>(kNoTl0PicIdx)))
     return 3;
   else
     return 1;
