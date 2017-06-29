@@ -762,23 +762,23 @@ struct PlayoutDelay {
 //      be omitted.
 struct FrameMarks {
   FrameMarks()
-      : startOfFrame(false),
-        endOfFrame(false),
+      : start_of_frame(false),
+        end_of_frame(false),
         independent(false),
         discardable(false),
-        baseLayerSync(false),
-        temporalLayerId(0),
-        spatialLayerId(0),
-	tl0PicIdx(0) {}	
+        base_layer_sync(false),
+        temporal_layer_id(0),
+        spatial_layer_id(0),
+	tl0_pic_idx(0) {}	
 
-  bool startOfFrame;
-  bool endOfFrame;
+  bool start_of_frame;
+  bool end_of_frame;
   bool independent;
   bool discardable;
-  bool baseLayerSync;
-  uint8_t temporalLayerId;
-  uint8_t spatialLayerId;
-  uint8_t tl0PicIdx;
+  bool base_layer_sync;
+  uint8_t temporal_layer_id;
+  uint8_t spatial_layer_id;
+  uint8_t tl0_pic_idx;
 };
 
 // Class to represent the value of RTP header extensions that are

@@ -386,9 +386,9 @@ constexpr const char RtpMid::kUri[];
 // https://tools.ietf.org/html/draft-ietf-avtext-framemarking-04#page-4
 // This extensions provides meta-information about the RTP streams outside the
 // encrypted media payload, an RTP switch can do codec-agnostic
-// selective forwarding without decrypting the payload
+// selective forwarding without decrypting the payload.
 //
-// for Non-Scalable Streams
+// for Non-Scalable Streams:
 //
 //     0                   1
 //     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
@@ -396,7 +396,7 @@ constexpr const char RtpMid::kUri[];
 //    |  ID=? |  L=0  |S|E|I|D|0 0 0 0|
 //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //
-// for Scalable Streams
+// for Scalable Streams:
 //
 //     0                   1                   2                   3
 //     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -407,46 +407,48 @@ constexpr const char RtpMid::kUri[];
 constexpr RTPExtensionType FrameMarking::kId;
 constexpr const char* FrameMarking::kUri;
 
-bool FrameMarking::Parse(const uint8_t* data,
-                         uint8_t length,
+bool FrameMarking::Parse(rtc::ArrayView<const uint8_t> data,
                          FrameMarks* frame_marks) {
   RTC_DCHECK(frame_marks);
-  RTC_DCHECK(length);
+  
+  if (data.empty())
+    return false;
+  
   // Set frame marking data
-  frame_marks->startOfFrame = (data[0] & 0x80) != 0;
-  frame_marks->endOfFrame = (data[0] & 0x40) != 0;
+  frame_marks->start_of_frame = (data[0] & 0x80) != 0;
+  frame_marks->end_of_frame = (data[0] & 0x40) != 0;
   frame_marks->independent = (data[0] & 0x20) != 0;
   frame_marks->discardable = (data[0] & 0x10) != 0;
 
-  // Check variable length
-  if (length==1) {
-    // We are non-scalable
-    frame_marks->baseLayerSync = 0;
-    frame_marks->temporalLayerId = 0;
-    frame_marks->spatialLayerId = 0;
-    frame_marks->tl0PicIdx = 0;
-  } else if (length==3) {
+  // Check variable length.
+  if (data.size() == 1) {
+    // We are non-scalable.
+    frame_marks->base_layer_sync = 0;
+    frame_marks->temporal_layer_id = 0;
+    frame_marks->spatial_layer_id = 0;
+    frame_marks->tl0_pic_idx = 0;
+  } else if (data.size() == 3) {
     // Set scalable parts
-    frame_marks->baseLayerSync = (data[0] & 0x08) != 0;
-    frame_marks->temporalLayerId = (data[0] & 0x07) != 0;
-    frame_marks->spatialLayerId = data[1];
-    frame_marks->tl0PicIdx = data[2];
+    frame_marks->base_layer_sync = (data[0] & 0x08) != 0;
+    frame_marks->temporal_layer_id = (data[0] & 0x07) != 0;
+    frame_marks->spatial_layer_id = data[1];
+    frame_marks->tl0_pic_idx = data[2];
   } else {
-    // Incorrect length
+    // Incorrect length.
     return false;
   }
   return true;
 }
 
 size_t FrameMarking::ValueSize(const FrameMarks& frame_marks) {
-  // Check if it is scalable
-  if (frame_marks.baseLayerSync
-      || (frame_marks.temporalLayerId
-            && frame_marks.temporalLayerId != kNoTemporalIdx)
-      || (frame_marks.spatialLayerId
-            && frame_marks.spatialLayerId != kNoSpatialIdx)
-      || (frame_marks.tl0PicIdx
-            && frame_marks.tl0PicIdx != (uint8_t)kNoTl0PicIdx)
+  // Check if it is scalable.
+  if (frame_marks.base_layer_sync
+      || (frame_marks.temporal_layer_id
+            && frame_marks.temporal_layer_id != kNoTemporalIdx)
+      || (frame_marks.spatial_layer_id
+            && frame_marks.spatial_layer_id != kNoSpatialIdx)
+      || (frame_marks.tl0_pic_idx
+            && frame_marks.tl0_pic_idx != (uint8_t)kNoTl0PicIdx)
   )
     return 3;
   else
@@ -454,24 +456,24 @@ size_t FrameMarking::ValueSize(const FrameMarks& frame_marks) {
 }
 
 bool FrameMarking::Write(uint8_t* data, const FrameMarks& frame_marks) {
-  data[0] = frame_marks.startOfFrame ? 0x80 : 0x00;
-  data[0] |= frame_marks.endOfFrame ? 0x40 : 0x00;
+  data[0] = frame_marks.start_of_frame ? 0x80 : 0x00;
+  data[0] |= frame_marks.end_of_frame ? 0x40 : 0x00;
   data[0] |= frame_marks.independent ? 0x20 : 0x00;
   data[0] |= frame_marks.discardable ? 0x10 : 0x00;
 
-  // Check if it is scalable
-  if (frame_marks.baseLayerSync
-       || (frame_marks.temporalLayerId
-            && frame_marks.temporalLayerId != kNoTemporalIdx)
-       || (frame_marks.spatialLayerId
-            && frame_marks.spatialLayerId != kNoSpatialIdx)
-       || (frame_marks.tl0PicIdx
-            && frame_marks.tl0PicIdx != (uint8_t)kNoTl0PicIdx)
+  // Check if it is scalable.
+  if (frame_marks.base_layer_sync
+       || (frame_marks.temporal_layer_id
+            && frame_marks.temporal_layer_id != kNoTemporalIdx)
+       || (frame_marks.spatial_layer_id
+            && frame_marks.spatial_layer_id != kNoSpatialIdx)
+       || (frame_marks.tl0_pic_idx
+            && frame_marks.tl0_pic_idx != static_cast<uint8_t>(kNoTl0PicIdx))
     ) {
-    data[0] |= frame_marks.baseLayerSync ? 0x08 : 0x00;
-    data[0] |= (frame_marks.temporalLayerId & 0x07);
-    data[1] = frame_marks.spatialLayerId;
-    data[2] = frame_marks.tl0PicIdx;
+    data[0] |= frame_marks.base_layer_sync ? 0x08 : 0x00;
+    data[0] |= (frame_marks.temporal_layer_id & 0x07);
+    data[1] = frame_marks.spatial_layer_id;
+    data[2] = frame_marks.tl0_pic_idx;
   }
   return true;
 }

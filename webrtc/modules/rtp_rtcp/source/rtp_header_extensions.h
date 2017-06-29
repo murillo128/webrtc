@@ -187,8 +187,7 @@ class FrameMarking {
   static constexpr RTPExtensionType kId = kRtpExtensionFrameMarking;
   static constexpr const char* kUri =
       "urn:ietf:params:rtp-hdrext:framemarking";
-  static bool Parse(const uint8_t* data,
-                    uint8_t length,
+  static bool Parse(rtc::ArrayView<const uint8_t> data,
                     FrameMarks* frame_marks);
   static size_t ValueSize(const FrameMarks& frame_marks);
   static bool Write(uint8_t* data, const FrameMarks& frame_marks);
