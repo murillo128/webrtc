@@ -174,8 +174,14 @@ void Packet::GetHeader(RTPHeader* header) const {
   header->extension.hasVideoContentType =
       GetExtension<VideoContentTypeExtension>(
           &header->extension.videoContentType);
+<<<<<<< HEAD
   header->extension.has_video_timing =
       GetExtension<VideoTimingExtension>(&header->extension.video_timing);
+=======
+  header->extension.hasFramemarks =
+      GetExtension<FrameMarkingExtension>(
+          &header->extension.frame_marks);
+>>>>>>> format
   GetExtension<RtpStreamId>(&header->extension.stream_id);
   GetExtension<RepairedRtpStreamId>(&header->extension.repaired_stream_id);
   GetExtension<RtpMid>(&header->extension.mid);
