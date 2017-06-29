@@ -380,7 +380,6 @@ constexpr const char RepairedRtpStreamId::kUri[];
 constexpr RTPExtensionType RtpMid::kId;
 constexpr const char RtpMid::kUri[];
 
-
 // For Frame Marking RTP Header Extension:
 //
 // https://tools.ietf.org/html/draft-ietf-avtext-framemarking-04#page-4
@@ -410,10 +409,10 @@ constexpr const char* FrameMarking::kUri;
 bool FrameMarking::Parse(rtc::ArrayView<const uint8_t> data,
                          FrameMarks* frame_marks) {
   RTC_DCHECK(frame_marks);
-  
+
   if (data.empty())
     return false;
-  
+
   // Set frame marking data
   frame_marks->start_of_frame = (data[0] & 0x80) != 0;
   frame_marks->end_of_frame = (data[0] & 0x40) != 0;
@@ -442,14 +441,13 @@ bool FrameMarking::Parse(rtc::ArrayView<const uint8_t> data,
 
 size_t FrameMarking::ValueSize(const FrameMarks& frame_marks) {
   // Check if it is scalable.
-  if (frame_marks.base_layer_sync
-      || (frame_marks.temporal_layer_id
-            && frame_marks.temporal_layer_id != kNoTemporalIdx)
-      || (frame_marks.spatial_layer_id
-            && frame_marks.spatial_layer_id != kNoSpatialIdx)
-      || (frame_marks.tl0_pic_idx
-            && frame_marks.tl0_pic_idx != (uint8_t)kNoTl0PicIdx)
-  )
+  if (frame_marks.base_layer_sync ||
+      (frame_marks.temporal_layer_id &&
+       frame_marks.temporal_layer_id != kNoTemporalIdx) ||
+      (frame_marks.spatial_layer_id &&
+       frame_marks.spatial_layer_id != kNoSpatialIdx) ||
+      (frame_marks.tl0_pic_idx &&
+       frame_marks.tl0_pic_idx != (uint8_t)kNoTl0PicIdx))
     return 3;
   else
     return 1;
@@ -462,14 +460,13 @@ bool FrameMarking::Write(uint8_t* data, const FrameMarks& frame_marks) {
   data[0] |= frame_marks.discardable ? 0x10 : 0x00;
 
   // Check if it is scalable.
-  if (frame_marks.base_layer_sync
-       || (frame_marks.temporal_layer_id
-            && frame_marks.temporal_layer_id != kNoTemporalIdx)
-       || (frame_marks.spatial_layer_id
-            && frame_marks.spatial_layer_id != kNoSpatialIdx)
-       || (frame_marks.tl0_pic_idx
-            && frame_marks.tl0_pic_idx != static_cast<uint8_t>(kNoTl0PicIdx))
-    ) {
+  if (frame_marks.base_layer_sync ||
+      (frame_marks.temporal_layer_id &&
+       frame_marks.temporal_layer_id != kNoTemporalIdx) ||
+      (frame_marks.spatial_layer_id &&
+       frame_marks.spatial_layer_id != kNoSpatialIdx) ||
+      (frame_marks.tl0_pic_idx &&
+       frame_marks.tl0_pic_idx != static_cast<uint8_t>(kNoTl0PicIdx))) {
     data[0] |= frame_marks.base_layer_sync ? 0x08 : 0x00;
     data[0] |= (frame_marks.temporal_layer_id & 0x07);
     data[1] = frame_marks.spatial_layer_id;

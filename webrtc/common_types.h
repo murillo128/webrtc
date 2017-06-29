@@ -875,7 +875,7 @@ struct RTPHeaderExtension {
   // For Frame Marking RTP Header Extension:
   // https://tools.ietf.org/html/draft-ietf-avtext-framemarking-05
   bool hasFrameMarks;
-  FrameMarks frameMarks;
+  FrameMarks frame_marks;
 };
 
 struct RTPHeader {

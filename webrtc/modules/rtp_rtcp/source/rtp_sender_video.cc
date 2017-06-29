@@ -378,7 +378,8 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
       break;
     case kRtpVideoVp9:
       frame_marks.discardable = false;
-      frame_marks.temporal_layer_id = video_header->codecHeader.VP9.temporal_idx;
+      frame_marks.temporal_layer_id =
+          video_header->codecHeader.VP9.temporal_idx;
       frame_marks.spatial_layer_id = kNoSpatialIdx;
       frame_marks.tl0_pic_idx = video_header->codecHeader.VP9.tl0_pic_idx;
       // TODO(sergio.garcia.murillo@gmail.com): This will need to be changed to
@@ -386,10 +387,12 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
       // so we can't have access to this values.
       // Also, small modifications to the extensions will be needed to not
       // change size of the extension between sid:0 and sid:1
-//    frame_marks.start_of_frame =
-//        video_header->codecHeader.VP9.beginning_of_frame;
-//    frame_marks.end_of_frame = video_header->codecHeader.VP9.end_of_frame;
-//    frame_marks.spatial_layer_id = video_header->codecHeader.VP9.spatial_idx;
+      //    frame_marks.start_of_frame =
+      //        video_header->codecHeader.VP9.beginning_of_frame;
+      //    frame_marks.end_of_frame =
+      //    video_header->codecHeader.VP9.end_of_frame;
+      //    frame_marks.spatial_layer_id =
+      //    video_header->codecHeader.VP9.spatial_idx;
       break;
     default:
       // Do not use frame marking.
@@ -397,8 +400,8 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
   }
   // Only add frame marking for known codecs.
   if (frame_marking_enabled)
-      // Add extension header for frame marking.
-      rtp_header->SetExtension<FrameMarking>(frame_marks);
+    // Add extension header for frame marking.
+    rtp_header->SetExtension<FrameMarking>(frame_marks);
 
   auto last_packet = rtc::MakeUnique<RtpPacketToSend>(*rtp_header);
 
