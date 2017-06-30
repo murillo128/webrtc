@@ -381,8 +381,8 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
       // Layer id format is codec dependant.
       frame_marks.temporal_layer_id =
           video_header->codecHeader.VP9.temporal_idx;
-      frame_marks.layer_id = FrameMarking::CreateLayerId(
-          video_header->codecHeader.VP9);
+      frame_marks.layer_id =
+          FrameMarking::CreateLayerId(video_header->codecHeader.VP9);
       frame_marks.tl0_pic_idx = video_header->codecHeader.VP9.tl0_pic_idx;
       break;
     default:

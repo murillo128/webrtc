@@ -190,7 +190,7 @@ class FrameMarking {
                     FrameMarks* frame_marks);
   static size_t ValueSize(const FrameMarks& frame_marks);
   static bool Write(uint8_t* data, const FrameMarks& frame_marks);
-  
+
   static uint8_t CreateLayerId(RTPVideoHeaderVP9 vp9);
 };
 
