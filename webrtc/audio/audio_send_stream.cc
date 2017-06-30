@@ -654,7 +654,7 @@ void AudioSendStream::RegisterCngPayloadType(int payload_type,
 }
 
 bool AudioSendStream::SetMediaCryptoKey(
-    const rtc::Optional<MediaCryptoKey> &media_crypto_key) {
+    const rtc::Optional<MediaCryptoKey>& media_crypto_key) {
   return channel_proxy_->SetMediaCryptoKey(media_crypto_key);
 }
 

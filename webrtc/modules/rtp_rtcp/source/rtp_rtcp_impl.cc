@@ -919,10 +919,10 @@ void ModuleRtpRtcpImpl::SetVideoBitrateAllocation(
 }
 
 bool ModuleRtpRtcpImpl::SetMediaCryptoKey(
-    const rtc::Optional<MediaCryptoKey> &media_crypto_key) {
+    const rtc::Optional<MediaCryptoKey>& media_crypto_key) {
   if (rtp_sender_)
-  // Set end to end media encryption key
-  return rtp_sender_->SetMediaCryptoKey(media_crypto_key);
+    // Set end to end media encryption key
+    return rtp_sender_->SetMediaCryptoKey(media_crypto_key);
   return true;
 }
 

@@ -1063,11 +1063,11 @@ class WebRtcVoiceMediaChannel::WebRtcAudioSendStream
         !rtp_parameters_.media_crypto_suite.empty()) {
       webrtc::MediaCryptoKey key;
       if (!key.Parse(rtp_parameters_.media_crypto_suite,
-          rtp_parameters_.media_crypto_key))
+                     rtp_parameters_.media_crypto_key))
         return false;
       LOG(LS_INFO) << "Enabling E2E Media Encryption with key "
-        << rtp_parameters_.media_crypto_key << " and suite "
-        << rtp_parameters_.media_crypto_suite;
+                   << rtp_parameters_.media_crypto_key << " and suite "
+                   << rtp_parameters_.media_crypto_suite;
 
       SetMediaCryptoKey(rtc::Optional<webrtc::MediaCryptoKey>(key));
     }
@@ -1091,6 +1091,7 @@ class WebRtcVoiceMediaChannel::WebRtcAudioSendStream
     RTC_DCHECK(stream_);
     return stream_->SetMediaCryptoKey(media_crypto_key);
   }
+
  private:
   void UpdateSendState() {
     RTC_DCHECK(worker_thread_checker_.CalledOnValidThread());
@@ -1332,11 +1333,11 @@ class WebRtcVoiceMediaChannel::WebRtcAudioReceiveStream {
         !parameters.media_crypto_suite.empty()) {
       webrtc::MediaCryptoKey key;
       if (!key.Parse(parameters.media_crypto_suite,
-          parameters.media_crypto_key))
+                     parameters.media_crypto_key))
         return false;
       LOG(LS_INFO) << "Enabling E2E Media Encryption with key "
-        << parameters.media_crypto_key << " and suite "
-        << parameters.media_crypto_suite;
+                   << parameters.media_crypto_key << " and suite "
+                   << parameters.media_crypto_suite;
 
       SetMediaCryptoKey(rtc::Optional<webrtc::MediaCryptoKey>(key));
     }
@@ -2011,9 +2012,9 @@ bool WebRtcVoiceMediaChannel::AddRecvStream(const StreamParams& sp) {
   }
 
   WebRtcAudioReceiveStream* stream = new WebRtcAudioReceiveStream(
-          channel, ssrc, receiver_reports_ssrc_, recv_transport_cc_enabled_,
-          recv_nack_enabled_, sp.sync_label, recv_rtp_extensions_, call_, this,
-          engine()->decoder_factory_, decoder_map_);
+      channel, ssrc, receiver_reports_ssrc_, recv_transport_cc_enabled_,
+      recv_nack_enabled_, sp.sync_label, recv_rtp_extensions_, call_, this,
+      engine()->decoder_factory_, decoder_map_);
 
   stream->SetMediaCryptoKey(media_crypto_key());
   recv_streams_.insert(std::make_pair(ssrc, stream));

@@ -280,8 +280,7 @@ void VideoEncoderConfig::Vp9EncoderSpecificSettings::FillVideoCodecVp9(
   *vp9_settings = specifics_;
 }
 
-
-bool MediaCryptoKey::Parse(const std::string &suite, const std::string &str) {
+bool MediaCryptoKey::Parse(const std::string& suite, const std::string& str) {
   size_t len;
 
   // Get suite from name
@@ -295,7 +294,8 @@ bool MediaCryptoKey::Parse(const std::string &suite, const std::string &str) {
 
   // Decode the key
   if (!rtc::Base64::DecodeFromArray(str.c_str(), str.length(),
-    rtc::Base64::DecodeOption::DO_STRICT, &buffer, &len)) {
+                                    rtc::Base64::DecodeOption::DO_STRICT,
+                                    &buffer, &len)) {
     LOG(LS_WARNING) << "Failed to parse MediaCryptoKey: base64 decode failed";
     return false;
   }
@@ -304,7 +304,7 @@ bool MediaCryptoKey::Parse(const std::string &suite, const std::string &str) {
   int expected_key_len;
   int expected_salt_len;
   if (!rtc::GetSrtpKeyAndSaltLengths(crypto_suite, &expected_key_len,
-      &expected_salt_len)) {
+                                     &expected_salt_len)) {
     // This should never happen.
     LOG(LS_WARNING) << "Failed to parse MediaCryptoKey: unsupported"
                     << " cipher suite without length information "
@@ -313,10 +313,10 @@ bool MediaCryptoKey::Parse(const std::string &suite, const std::string &str) {
   }
 
   size_t expected = static_cast<size_t>(expected_key_len + expected_salt_len);
-  if ( buffer.size() != expected ) {
+  if (buffer.size() != expected) {
     LOG(LS_WARNING) << "Failed to create SRTP session: invalid key,"
-                    << " key length" << buffer.size()
-                    << " expected" << expected;
+                    << " key length" << buffer.size() << " expected"
+                    << expected;
     return false;
   }
 

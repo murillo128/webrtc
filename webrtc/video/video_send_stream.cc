@@ -243,8 +243,8 @@ class VideoSendStreamImpl : public webrtc::BitrateAllocatorObserver,
   void SetTransportOverhead(size_t transport_overhead_per_packet);
 
   // End to end media crypto
-  bool SetMediaCryptoKey(
-    const rtc::Optional<MediaCryptoKey> &media_crypto_key);
+  bool SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey>& media_crypto_key);
+
  private:
   class CheckEncoderActivityTask;
   class EncoderReconfiguredTask;
@@ -633,7 +633,7 @@ void VideoSendStream::EnableEncodedFrameRecording(
 }
 
 bool VideoSendStream::SetMediaCryptoKey(
-    const rtc::Optional<MediaCryptoKey> &media_crypto_key) {
+    const rtc::Optional<MediaCryptoKey>& media_crypto_key) {
   return send_stream_->SetMediaCryptoKey(media_crypto_key);
 }
 
@@ -1262,7 +1262,7 @@ void VideoSendStreamImpl::SetTransportOverhead(
 }
 
 bool VideoSendStreamImpl::SetMediaCryptoKey(
-    const rtc::Optional<MediaCryptoKey> &media_crypto_key) {
+    const rtc::Optional<MediaCryptoKey>& media_crypto_key) {
   bool result = true;
   for (RtpRtcp* rtp_rtcp : rtp_rtcp_modules_) {
     result &= rtp_rtcp->SetMediaCryptoKey(media_crypto_key);

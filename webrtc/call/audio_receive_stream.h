@@ -142,7 +142,7 @@ class AudioReceiveStream {
 
   // End to End media encryption
   virtual bool SetMediaCryptoKey(
-      const rtc::Optional<MediaCryptoKey> &media_crypto_key) = 0;
+      const rtc::Optional<MediaCryptoKey>& media_crypto_key) = 0;
 
  protected:
   virtual ~AudioReceiveStream() {}

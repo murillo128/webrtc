@@ -71,7 +71,7 @@ class RtpReceiverImpl : public RtpReceiver {
   }
 
   // End to end media encryption
-  bool SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey> &key) override;
+  bool SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey>& key) override;
 
  private:
   bool HaveReceivedFrame() const;

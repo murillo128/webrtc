@@ -96,7 +96,7 @@ class RtpReceiver {
   virtual std::vector<RtpSource> GetSources() const = 0;
 
   // End to End media ecnryption
-  virtual bool SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey> &key) = 0;
+  virtual bool SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey>& key) = 0;
 };
 }  // namespace webrtc
 

@@ -152,12 +152,8 @@ int32_t RTPReceiverAudio::ParseRtpPacket(WebRtcRTPHeader* rtp_header,
     LOG(LS_INFO) << "Received first audio RTP packet";
   }
 
-  return ParseAudioCodecSpecific(rtp_header,
-                                 payload,
-                                 payload_length,
-                                 specific_payload.Audio,
-                                 is_red,
-                                 media_crypto);
+  return ParseAudioCodecSpecific(rtp_header, payload, payload_length,
+                                 specific_payload.Audio, is_red, media_crypto);
 }
 
 RTPAliveType RTPReceiverAudio::ProcessDeadOrAlive(

@@ -570,14 +570,13 @@ int BaseChannel::SetOption_n(SocketType type,
 }
 
 bool BaseChannel::SetMediaCryptoKey(
-  const rtc::Optional<webrtc::MediaCryptoKey> &key) {
+    const rtc::Optional<webrtc::MediaCryptoKey>& key) {
   if (!media_channel_)
     return false;
   // Set it on the media channel
   media_channel_->SetMediaCryptoKey(key);
   return true;
 }
-
 
 void BaseChannel::OnWritableState(rtc::PacketTransportInternal* transport) {
   RTC_DCHECK(transport == rtp_transport_->rtp_packet_transport() ||

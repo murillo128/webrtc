@@ -291,7 +291,8 @@ class WebRtcVideoChannel : public VideoMediaChannel, public webrtc::Transport {
 
     // End to end media crypto
     bool SetMediaCryptoKey(
-      const rtc::Optional<webrtc::MediaCryptoKey> &media_crypto_key);
+        const rtc::Optional<webrtc::MediaCryptoKey>& media_crypto_key);
+
    private:
     // Parameters needed to reconstruct the underlying stream.
     // webrtc::VideoSendStream doesn't support setting a lot of options on the
@@ -418,7 +419,7 @@ class WebRtcVideoChannel : public VideoMediaChannel, public webrtc::Transport {
 
     // End to end media crypto
     bool SetMediaCryptoKey(
-      const rtc::Optional<webrtc::MediaCryptoKey> &media_crypto_key);
+        const rtc::Optional<webrtc::MediaCryptoKey>& media_crypto_key);
 
    private:
     struct AllocatedDecoder {

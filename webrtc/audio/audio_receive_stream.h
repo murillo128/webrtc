@@ -81,7 +81,8 @@ class AudioReceiveStream final : public webrtc::AudioReceiveStream,
   const webrtc::AudioReceiveStream::Config& config() const;
 
   // End to end media crypto
-  bool SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey> &media_crypto_key);
+  bool SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey>& media_crypto_key);
+
  private:
   VoiceEngine* voice_engine() const;
   AudioState* audio_state() const;

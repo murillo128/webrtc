@@ -536,17 +536,16 @@ bool WebRtcSession::Initialize(
     const PeerConnectionFactoryInterface::Options& options,
     std::unique_ptr<rtc::RTCCertificateGeneratorInterface> cert_generator,
     const PeerConnectionInterface::RTCConfiguration& rtc_configuration) {
-
   // Parse E2E media crypto key
   if (!rtc_configuration.media_crypto_key.empty() &&
       !rtc_configuration.media_crypto_suite.empty()) {
     MediaCryptoKey key;
     if (!key.Parse(rtc_configuration.media_crypto_suite,
-        rtc_configuration.media_crypto_key))
+                   rtc_configuration.media_crypto_key))
       return false;
     LOG(LS_INFO) << "Enabling E2E Media Encryption with key "
-      << rtc_configuration.media_crypto_key << " and suite "
-      << rtc_configuration.media_crypto_suite;
+                 << rtc_configuration.media_crypto_key << " and suite "
+                 << rtc_configuration.media_crypto_suite;
     media_crypto_key_ = rtc::Optional<MediaCryptoKey>(key);
   }
 

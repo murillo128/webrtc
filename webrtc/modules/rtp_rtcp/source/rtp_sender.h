@@ -206,8 +206,8 @@ class RTPSender {
   void SendKeepAlive(uint8_t payload_type);
 
   // End to End media crypto
-  bool SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey> &key);
-  bool MediaEncrypt(rtp::Packet *packet);
+  bool SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey>& key);
+  bool MediaEncrypt(rtp::Packet* packet);
   size_t GetMediaEncryptionOverhead();
 
  protected:

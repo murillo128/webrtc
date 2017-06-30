@@ -54,7 +54,7 @@ class FakeAudioSendStream final : public webrtc::AudioSendStream {
   bool IsSending() const { return sending_; }
   bool muted() const { return muted_; }
   bool SetMediaCryptoKey(
-      const rtc::Optional<webrtc::MediaCryptoKey> &media_crypto_key) {
+      const rtc::Optional<webrtc::MediaCryptoKey>& media_crypto_key) {
     return true;
   }
 
@@ -95,9 +95,10 @@ class FakeAudioReceiveStream final : public webrtc::AudioReceiveStream {
                   const webrtc::PacketTime& packet_time);
   bool started() const { return started_; }
   bool SetMediaCryptoKey(
-      const rtc::Optional<webrtc::MediaCryptoKey> &media_crypto_key) {
+      const rtc::Optional<webrtc::MediaCryptoKey>& media_crypto_key) {
     return true;
   }
+
  private:
   // webrtc::AudioReceiveStream implementation.
   void Start() override { started_ = true; }
@@ -158,7 +159,7 @@ class FakeVideoSendStream final
     return source_;
   }
   bool SetMediaCryptoKey(
-      const rtc::Optional<webrtc::MediaCryptoKey> &media_crypto_key) {
+      const rtc::Optional<webrtc::MediaCryptoKey>& media_crypto_key) {
     return true;
   }
 
@@ -210,7 +211,7 @@ class FakeVideoReceiveStream final : public webrtc::VideoReceiveStream {
   void EnableEncodedFrameRecording(rtc::PlatformFile file,
                                    size_t byte_limit) override;
   bool SetMediaCryptoKey(
-      const rtc::Optional<webrtc::MediaCryptoKey> &media_crypto_key) {
+      const rtc::Optional<webrtc::MediaCryptoKey>& media_crypto_key) {
     return true;
   }
 

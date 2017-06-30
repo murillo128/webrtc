@@ -92,7 +92,7 @@ class VideoSendStream : public webrtc::VideoSendStream {
 
   // End to end media crypto
   bool SetMediaCryptoKey(
-    const rtc::Optional<MediaCryptoKey> &media_crypto_key) override;
+      const rtc::Optional<MediaCryptoKey>& media_crypto_key) override;
 
  private:
   class ConstructionTask;

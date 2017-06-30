@@ -79,7 +79,8 @@ class AudioSendStream final : public webrtc::AudioSendStream,
   const TimeInterval& GetActiveLifetime() const;
 
   // End to end media crypto
-  bool SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey> &media_crypto_key);
+  bool SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey>& media_crypto_key);
+
  private:
   class TimedTransport;
 

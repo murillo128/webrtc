@@ -29,7 +29,7 @@ class MediaCryptoKey {
  public:
   int type = rtc::SRTP_INVALID_CRYPTO_SUITE;
   std::vector<uint8_t> buffer;
-  bool Parse(const std::string &suite, const std::string &str);
+  bool Parse(const std::string& suite, const std::string& str);
 };
 
 // Settings for NACK, see RFC 4585 for details.

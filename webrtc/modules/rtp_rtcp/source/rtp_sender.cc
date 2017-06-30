@@ -1302,7 +1302,7 @@ void RTPSender::SendKeepAlive(uint8_t payload_type) {
                 RtpPacketSender::Priority::kLowPriority);
 }
 
-bool RTPSender::SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey> &key) {
+bool RTPSender::SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey>& key) {
   LOG(LS_INFO) << "Setting End to End Media Encryption";
 
   rtc::CritScope cs(&send_critsect_);
@@ -1311,10 +1311,10 @@ bool RTPSender::SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey> &key) {
   } else {
     media_crypto_enabled_ = false;
   }
-  return  media_crypto_enabled_;
+  return media_crypto_enabled_;
 }
 
-bool RTPSender::MediaEncrypt(rtp::Packet *packet) {
+bool RTPSender::MediaEncrypt(rtp::Packet* packet) {
   if (media_crypto_enabled_)
     return media_crypto_.Encrypt(packet);
   return true;

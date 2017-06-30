@@ -128,7 +128,7 @@ class ChannelProxy : public RtpPacketSinkInterface {
   virtual std::vector<webrtc::RtpSource> GetSources() const;
   // End to end media crypto
   virtual bool SetMediaCryptoKey(
-    const rtc::Optional<MediaCryptoKey> &media_crypto_key);
+      const rtc::Optional<MediaCryptoKey>& media_crypto_key);
 
  private:
   Channel* channel() const;

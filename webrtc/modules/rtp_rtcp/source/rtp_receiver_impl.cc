@@ -553,7 +553,7 @@ void RtpReceiverImpl::RemoveOutdatedSources(int64_t now_ms) {
 }
 
 bool RtpReceiverImpl::SetMediaCryptoKey(
-    const rtc::Optional<MediaCryptoKey> &key) {
+    const rtc::Optional<MediaCryptoKey>& key) {
   LOG(LS_INFO) << "Setting End to End Media Encryption";
 
   rtc::CritScope cs(&critical_section_rtp_receiver_);

@@ -45,4 +45,3 @@ class MediaCrypto {
 
 }  // namespace webrtc
 #endif  // WEBRTC_MODULES_RTP_RTCP_SOURCE_MEDIA_CRYPTO_H_
-

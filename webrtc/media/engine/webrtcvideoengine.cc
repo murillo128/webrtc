@@ -1180,7 +1180,7 @@ bool WebRtcVideoChannel::AddRecvStream(const StreamParams& sp,
   // Set end to end media encryption key
   stream->SetMediaCryptoKey(media_crypto_key());
 
-  receive_streams_[ssrc]= stream;
+  receive_streams_[ssrc] = stream;
 
   return true;
 }
@@ -1834,11 +1834,11 @@ bool WebRtcVideoChannel::WebRtcVideoSendStream::SetRtpParameters(
       !rtp_parameters_.media_crypto_suite.empty()) {
     webrtc::MediaCryptoKey key;
     if (!key.Parse(rtp_parameters_.media_crypto_suite,
-      rtp_parameters_.media_crypto_key))
-        return false;
+                   rtp_parameters_.media_crypto_key))
+      return false;
     LOG(LS_INFO) << "Enabling End to End Media Encryption with key "
-      << rtp_parameters_.media_crypto_key << " and suite "
-      << rtp_parameters_.media_crypto_suite;
+                 << rtp_parameters_.media_crypto_key << " and suite "
+                 << rtp_parameters_.media_crypto_suite;
 
     SetMediaCryptoKey(rtc::Optional<webrtc::MediaCryptoKey>(key));
   }
@@ -1849,7 +1849,7 @@ bool WebRtcVideoChannel::WebRtcVideoSendStream::SetRtpParameters(
 }
 
 bool WebRtcVideoChannel::WebRtcVideoSendStream::SetMediaCryptoKey(
-    const rtc::Optional<webrtc::MediaCryptoKey> &media_crypto_key) {
+    const rtc::Optional<webrtc::MediaCryptoKey>& media_crypto_key) {
   media_crypto_key_ = media_crypto_key;
   if (stream_)
     stream_->SetMediaCryptoKey(media_crypto_key);
@@ -2365,12 +2365,11 @@ bool WebRtcVideoChannel::WebRtcVideoReceiveStream::SetRtpParameters(
   if (!parameters.media_crypto_key.empty() &&
       !parameters.media_crypto_suite.empty()) {
     webrtc::MediaCryptoKey key;
-    if (!key.Parse(parameters.media_crypto_suite,
-      parameters.media_crypto_key))
-        return false;
+    if (!key.Parse(parameters.media_crypto_suite, parameters.media_crypto_key))
+      return false;
     LOG(LS_INFO) << "Enabling End to End Media Encryption with key "
-      << parameters.media_crypto_key << " and suite "
-      << parameters.media_crypto_suite;
+                 << parameters.media_crypto_key << " and suite "
+                 << parameters.media_crypto_suite;
 
     SetMediaCryptoKey(rtc::Optional<webrtc::MediaCryptoKey>(key));
   }
@@ -2379,7 +2378,7 @@ bool WebRtcVideoChannel::WebRtcVideoReceiveStream::SetRtpParameters(
 }
 
 bool WebRtcVideoChannel::WebRtcVideoReceiveStream::SetMediaCryptoKey(
-    const rtc::Optional<webrtc::MediaCryptoKey> &media_crypto_key) {
+    const rtc::Optional<webrtc::MediaCryptoKey>& media_crypto_key) {
   media_crypto_key_ = media_crypto_key;
   if (stream_)
     stream_->SetMediaCryptoKey(media_crypto_key);
