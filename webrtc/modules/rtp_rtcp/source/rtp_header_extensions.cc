@@ -429,7 +429,7 @@ bool FrameMarking::Parse(rtc::ArrayView<const uint8_t> data,
   } else if (data.size() == 3) {
     // Set scalable parts
     frame_marks->base_layer_sync = (data[0] & 0x08) != 0;
-    frame_marks->temporal_layer_id = (data[0] & 0x07) != 0;
+    frame_marks->temporal_layer_id = data[0] & 0x07;
     frame_marks->layer_id = data[1];
     frame_marks->tl0_pic_idx = data[2];
   } else {
