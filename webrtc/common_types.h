@@ -768,7 +768,7 @@ struct FrameMarks {
         discardable(false),
         base_layer_sync(false),
         temporal_layer_id(0),
-        spatial_layer_id(0),
+        layer_id(0),
 	tl0_pic_idx(0) {}	
 
   bool start_of_frame;
@@ -777,7 +777,7 @@ struct FrameMarks {
   bool discardable;
   bool base_layer_sync;
   uint8_t temporal_layer_id;
-  uint8_t spatial_layer_id;
+  uint8_t layer_id;
   uint8_t tl0_pic_idx;
 };
 

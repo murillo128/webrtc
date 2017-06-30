@@ -366,21 +366,23 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
       // Nothing to add
       frame_marks.discardable = false;
       frame_marks.temporal_layer_id = kNoTemporalIdx;
-      frame_marks.spatial_layer_id = kNoSpatialIdx;
+      frame_marks.layer_id = kNoSpatialIdx;
       frame_marks.tl0_pic_idx = static_cast<uint8_t>(kNoTl0PicIdx);
       break;
     case kRtpVideoVp8:
       frame_marks.discardable = video_header->codecHeader.VP8.nonReference;
       frame_marks.base_layer_sync = video_header->codecHeader.VP8.layerSync;
       frame_marks.temporal_layer_id = video_header->codecHeader.VP8.temporalIdx;
-      frame_marks.spatial_layer_id = kNoSpatialIdx;
+      frame_marks.layer_id = kNoSpatialIdx;
       frame_marks.tl0_pic_idx = video_header->codecHeader.VP8.tl0PicIdx;
       break;
     case kRtpVideoVp9:
       frame_marks.discardable = false;
+      // Layer id format is codec dependant.
       frame_marks.temporal_layer_id =
           video_header->codecHeader.VP9.temporal_idx;
-      frame_marks.spatial_layer_id = video_header->codecHeader.VP9.spatial_idx;
+      frame_marks.layer_id = FrameMarking::CreateLayerId(
+          video_header->codecHeader.VP9);
       frame_marks.tl0_pic_idx = video_header->codecHeader.VP9.tl0_pic_idx;
       break;
     default:

@@ -424,13 +424,13 @@ bool FrameMarking::Parse(rtc::ArrayView<const uint8_t> data,
     // We are non-scalable.
     frame_marks->base_layer_sync = false;
     frame_marks->temporal_layer_id = 0;
-    frame_marks->spatial_layer_id = 0;
+    frame_marks->layer_id = 0;
     frame_marks->tl0_pic_idx = 0;
   } else if (data.size() == 3) {
     // Set scalable parts
     frame_marks->base_layer_sync = (data[0] & 0x08) != 0;
     frame_marks->temporal_layer_id = (data[0] & 0x07) != 0;
-    frame_marks->spatial_layer_id = data[1];
+    frame_marks->layer_id = data[1];
     frame_marks->tl0_pic_idx = data[2];
   } else {
     // Incorrect length.
@@ -444,8 +444,8 @@ size_t FrameMarking::ValueSize(const FrameMarks& frame_marks) {
   if (frame_marks.base_layer_sync ||
       (frame_marks.temporal_layer_id &&
        frame_marks.temporal_layer_id != kNoTemporalIdx) ||
-      (frame_marks.spatial_layer_id &&
-       frame_marks.spatial_layer_id != kNoSpatialIdx) ||
+      (frame_marks.layer_id &&
+       frame_marks.layer_id != kNoSpatialIdx) ||
       (frame_marks.tl0_pic_idx &&
        frame_marks.tl0_pic_idx != static_cast<uint8_t>(kNoTl0PicIdx)))
     return 3;
@@ -463,16 +463,31 @@ bool FrameMarking::Write(uint8_t* data, const FrameMarks& frame_marks) {
   if (frame_marks.base_layer_sync ||
       (frame_marks.temporal_layer_id &&
        frame_marks.temporal_layer_id != kNoTemporalIdx) ||
-      (frame_marks.spatial_layer_id &&
-       frame_marks.spatial_layer_id != kNoSpatialIdx) ||
+      (frame_marks.layer_id &&
+       frame_marks.layer_id != kNoSpatialIdx) ||
       (frame_marks.tl0_pic_idx &&
        frame_marks.tl0_pic_idx != static_cast<uint8_t>(kNoTl0PicIdx))) {
     data[0] |= frame_marks.base_layer_sync ? 0x08 : 0x00;
     data[0] |= (frame_marks.temporal_layer_id & 0x07);
-    data[1] = frame_marks.spatial_layer_id;
+    data[1] = frame_marks.layer_id;
     data[2] = frame_marks.tl0_pic_idx;
   }
   return true;
+}
+
+uint8_t FrameMarking::CreateLayerId(RTPVideoHeaderVP9 vp9) {
+  // The following  shows VP9 Layer encoding information (3 bits for
+  // spatial and temporal layer) mapped to the generic LID and TID fields.
+  // The P and U bits MUST match the corresponding bits in the VP9 Payload
+  // Description.
+  //    0                   1                   2                   3
+  //    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  //   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  //   |  ID=2 |  L=2  |S|E|I|D|B| TID |0|0|0|P|U| SID |    TL0PICIDX  |
+  //   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  return (vp9.spatial_idx != kNoSpatialIdx ?  vp9.spatial_idx & 0x07 : 0x00) |
+          (vp9.temporal_up_switch ? 0x08 : 0x00) |
+          (vp9.inter_pic_predicted ? 0x10 : 0x00);
 }
 
 }  // namespace webrtc
