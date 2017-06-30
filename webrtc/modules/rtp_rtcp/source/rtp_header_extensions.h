@@ -191,7 +191,10 @@ class FrameMarking {
   static size_t ValueSize(const FrameMarks& frame_marks);
   static bool Write(uint8_t* data, const FrameMarks& frame_marks);
 
-  static uint8_t CreateLayerId(RTPVideoHeaderVP9 vp9);
+  static uint8_t CreateLayerId(const RTPVideoHeaderVP9& vp9);
+  
+ private:
+  static bool IsScalable(const FrameMarks& frame_marks);
 };
 
 }  // namespace webrtc

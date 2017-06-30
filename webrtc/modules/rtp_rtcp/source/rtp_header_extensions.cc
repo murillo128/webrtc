@@ -439,17 +439,18 @@ bool FrameMarking::Parse(rtc::ArrayView<const uint8_t> data,
   return true;
 }
 
-size_t FrameMarking::ValueSize(const FrameMarks& frame_marks) {
-  // Check if it is scalable.
-  if (frame_marks.base_layer_sync ||
+bool FrameMarking::IsScalable(const FrameMarks& frame_marks)
+{
+  return (frame_marks.base_layer_sync ||
       (frame_marks.temporal_layer_id &&
        frame_marks.temporal_layer_id != kNoTemporalIdx) ||
       (frame_marks.layer_id && frame_marks.layer_id != kNoSpatialIdx) ||
       (frame_marks.tl0_pic_idx &&
-       frame_marks.tl0_pic_idx != static_cast<uint8_t>(kNoTl0PicIdx)))
-    return 3;
-  else
-    return 1;
+       frame_marks.tl0_pic_idx != kNoTl0PicIdx));
+}
+
+size_t FrameMarking::ValueSize(const FrameMarks& frame_marks) {
+  return IsScalable(frame_marks) ? 3 : 1;
 }
 
 bool FrameMarking::Write(uint8_t* data, const FrameMarks& frame_marks) {
@@ -459,21 +460,16 @@ bool FrameMarking::Write(uint8_t* data, const FrameMarks& frame_marks) {
   data[0] |= frame_marks.discardable ? 0x10 : 0x00;
 
   // Check if it is scalable.
-  if (frame_marks.base_layer_sync ||
-      (frame_marks.temporal_layer_id &&
-       frame_marks.temporal_layer_id != kNoTemporalIdx) ||
-      (frame_marks.layer_id && frame_marks.layer_id != kNoSpatialIdx) ||
-      (frame_marks.tl0_pic_idx &&
-       frame_marks.tl0_pic_idx != static_cast<uint8_t>(kNoTl0PicIdx))) {
+  if (IsScalable(frame_marks)) {
     data[0] |= frame_marks.base_layer_sync ? 0x08 : 0x00;
     data[0] |= (frame_marks.temporal_layer_id & 0x07);
     data[1] = frame_marks.layer_id;
-    data[2] = frame_marks.tl0_pic_idx;
+    data[2] = static_cast<uint8_t>(frame_marks.tl0_pic_idx);
   }
   return true;
 }
 
-uint8_t FrameMarking::CreateLayerId(RTPVideoHeaderVP9 vp9) {
+uint8_t FrameMarking::CreateLayerId(const RTPVideoHeaderVP9& vp9) {
   // The following  shows VP9 Layer encoding information (3 bits for
   // spatial and temporal layer) mapped to the generic LID and TID fields.
   // The P and U bits MUST match the corresponding bits in the VP9 Payload

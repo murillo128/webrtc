@@ -778,7 +778,7 @@ struct FrameMarks {
   bool base_layer_sync;
   uint8_t temporal_layer_id;
   uint8_t layer_id;
-  uint8_t tl0_pic_idx;
+  int16_t tl0_pic_idx;
 };
 
 // Class to represent the value of RTP header extensions that are
