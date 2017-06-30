@@ -439,14 +439,12 @@ bool FrameMarking::Parse(rtc::ArrayView<const uint8_t> data,
   return true;
 }
 
-bool FrameMarking::IsScalable(const FrameMarks& frame_marks)
-{
+bool FrameMarking::IsScalable(const FrameMarks& frame_marks) {
   return (frame_marks.base_layer_sync ||
-      (frame_marks.temporal_layer_id &&
-       frame_marks.temporal_layer_id != kNoTemporalIdx) ||
-      (frame_marks.layer_id && frame_marks.layer_id != kNoSpatialIdx) ||
-      (frame_marks.tl0_pic_idx &&
-       frame_marks.tl0_pic_idx != kNoTl0PicIdx));
+          (frame_marks.temporal_layer_id &&
+           frame_marks.temporal_layer_id != kNoTemporalIdx) ||
+          (frame_marks.layer_id && frame_marks.layer_id != kNoSpatialIdx) ||
+          (frame_marks.tl0_pic_idx && frame_marks.tl0_pic_idx != kNoTl0PicIdx));
 }
 
 size_t FrameMarking::ValueSize(const FrameMarks& frame_marks) {
