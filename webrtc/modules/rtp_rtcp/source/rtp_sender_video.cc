@@ -401,7 +401,7 @@ bool RTPSenderVideo::SendVideo(RtpVideoCodecTypes video_type,
   int32_t retransmission_settings;
   {
     rtc::CritScope cs(&crit_);
-    // According to;
+    // According to
     // http://www.etsi.org/deliver/etsi_ts/126100_126199/126114/12.07.00_60/
     // ts_126114v120700p.pdf Section 7.4.5:
     // The MTSI client shall add the payload bytes as defined in this clause
