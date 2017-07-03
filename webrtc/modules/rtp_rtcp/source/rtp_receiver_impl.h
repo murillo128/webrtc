@@ -110,10 +110,6 @@ class RtpReceiverImpl : public RtpReceiver {
   // The RtpSource objects are sorted chronologically.
   std::list<RtpSource> csrc_sources_;
   std::vector<RtpSource> ssrc_sources_;
-
-  // End to end media encryption
-  bool media_crypto_enabled_;
-  MediaCrypto media_crypto_;
 };
 }  // namespace webrtc
 #endif  // WEBRTC_MODULES_RTP_RTCP_SOURCE_RTP_RECEIVER_IMPL_H_

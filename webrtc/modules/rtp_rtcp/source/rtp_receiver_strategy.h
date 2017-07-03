@@ -45,8 +45,7 @@ class RTPReceiverStrategy {
                                  const uint8_t* payload,
                                  size_t payload_length,
                                  int64_t timestamp_ms,
-                                 bool is_first_packet,
-                                 MediaCrypto* media_crypto) = 0;
+                                 bool is_first_packet) = 0;
 
   virtual TelephoneEventHandler* GetTelephoneEventHandler() = 0;
 
@@ -81,6 +80,9 @@ class RTPReceiverStrategy {
   void GetLastMediaSpecificPayload(PayloadUnion* payload) const;
   void SetLastMediaSpecificPayload(const PayloadUnion& payload);
 
+  // End to end media encryption.
+  virtual bool SetMediaCryptoKey(const rtc::Optional<MediaCryptoKey>& key);
+  
  protected:
   // The data callback is where we should send received payload data.
   // See ParseRtpPacket. This class does not claim ownership of the callback.
@@ -95,6 +97,10 @@ class RTPReceiverStrategy {
   rtc::CriticalSection crit_sect_;
   PayloadUnion last_payload_;
   RtpData* data_callback_;
+  
+  // End to end media encryption
+  bool media_crypto_enabled_;
+  MediaCrypto media_crypto_;
 };
 }  // namespace webrtc
 
