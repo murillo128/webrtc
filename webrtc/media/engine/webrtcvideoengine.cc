@@ -2359,7 +2359,7 @@ void WebRtcVideoChannel::WebRtcVideoReceiveStream::SetRecvParameters(
 
 bool WebRtcVideoChannel::WebRtcVideoReceiveStream::SetRtpParameters(
     const webrtc::RtpParameters& parameters) {
-  // TODO: Update the rest of rtp parameters accordingly
+  // TODO(deadbeef): Update the rest of rtp parameters accordingly
 
   // Parse End to End media crypto key
   if (!parameters.media_crypto_key.empty() &&
