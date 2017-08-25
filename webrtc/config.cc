@@ -13,6 +13,7 @@
 #include <sstream>
 #include <string>
 
+#include "webrtc/rtc_base/base64.h"
 #include "webrtc/rtc_base/checks.h"
 
 namespace webrtc {

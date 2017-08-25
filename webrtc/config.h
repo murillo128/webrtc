@@ -16,11 +16,13 @@
 #include <string>
 #include <vector>
 
-#include "webrtc/base/basictypes.h"
-#include "webrtc/base/optional.h"
-#include "webrtc/base/refcount.h"
-#include "webrtc/base/scoped_ref_ptr.h"
-#include "webrtc/base/sslstreamadapter.h"
+#include "webrtc/common_types.h"
+#include "webrtc/rtc_base/basictypes.h"
+#include "webrtc/rtc_base/optional.h"
+#include "webrtc/rtc_base/refcount.h"
+#include "webrtc/rtc_base/scoped_ref_ptr.h"
+#include "webrtc/typedefs.h"
+#include "webrtc/rtc_base/sslstreamadapter.h"
 
 namespace webrtc {
 

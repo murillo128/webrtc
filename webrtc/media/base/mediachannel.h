@@ -11,11 +11,8 @@
 #ifndef WEBRTC_MEDIA_BASE_MEDIACHANNEL_H_
 #define WEBRTC_MEDIA_BASE_MEDIACHANNEL_H_
 
-<<<<<<< HEAD
-=======
 #include <algorithm>
 #include <map>
->>>>>>> Make lint almost happy
 #include <memory>
 #include <string>
 #include <vector>
