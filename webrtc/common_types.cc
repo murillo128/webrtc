@@ -56,7 +56,7 @@ RTPHeaderExtension::RTPHeaderExtension()
       hasVideoContentType(false),
       videoContentType(VideoContentType::UNSPECIFIED),
       has_video_timing(false),
-      hasFrameMarks(false) {}
+      has_frame_marks(false) {}
 
 RTPHeader::RTPHeader()
     : markerBit(false),
