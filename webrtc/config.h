@@ -21,8 +21,8 @@
 #include "webrtc/rtc_base/optional.h"
 #include "webrtc/rtc_base/refcount.h"
 #include "webrtc/rtc_base/scoped_ref_ptr.h"
-#include "webrtc/typedefs.h"
 #include "webrtc/rtc_base/sslstreamadapter.h"
+#include "webrtc/typedefs.h"
 
 namespace webrtc {
 
