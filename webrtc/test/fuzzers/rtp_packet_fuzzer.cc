@@ -108,7 +108,8 @@ void FuzzOneInput(const uint8_t* data, size_t size) {
         std::string mid;
         packet.GetExtension<RtpMid>(&mid);
         break;
-        case kRtpExtensionFrameMarking: {
+      }
+      case kRtpExtensionFrameMarking: {
           FrameMarks frame_marks;
           packet.GetExtension<FrameMarking>(&frame_marks);
           break;
