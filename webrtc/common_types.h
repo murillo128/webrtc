@@ -769,7 +769,7 @@ struct FrameMarks {
         base_layer_sync(false),
         temporal_layer_id(0),
         layer_id(0),
-	tl0_pic_idx(0) {}	
+        tl0_pic_idx(0) {}
 
   bool start_of_frame;
   bool end_of_frame;
@@ -871,7 +871,7 @@ struct RTPHeaderExtension {
   // For identifying the media section used to interpret this RTP packet. See
   // https://tools.ietf.org/html/draft-ietf-mmusic-sdp-bundle-negotiation-38
   Mid mid;
-  
+
   // For Frame Marking RTP Header Extension:
   // https://tools.ietf.org/html/draft-ietf-avtext-framemarking-05
   bool hasFrameMarks;
